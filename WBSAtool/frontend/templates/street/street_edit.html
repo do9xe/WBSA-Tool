@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block titel %}Straße bearbeiten{% endblock titel %}
+
+{% block data %}
+{% if street.id %}
+    <form action="{% url 'wbsa:street_edit' street.id %}" method="post" class="form-object-edit mt-5">
+{% else %}
+    <form action="{% url 'wbsa:street_new' %}" method="post" class="form-object-edit mt-5">
+{% endif %}
+    {% csrf_token %}
+        <div class="field-group my-5">
+	        <div class="row mb-3">
+                <label for="name" class="col-sm-3 col-form-label text-lg-end">Straßenname</label>
+                <div class="col">
+                    <input type="text" name="name" value="{{ street.name }}" maxlength="64" class="form-control" placeholder="Name" id="name">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="area" class="col-sm-3 col-form-label text-lg-end">Gebiet</label>
+                <div class="col">
+                    <select class="form-select" name="area" id="area">
+                        <option value="None">None</option>
+                        {% for area in area_list %}
+                        <option value="{{area.id}}"{%if street.area == area %}selected{%endif%}>{{area.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="text-end my-3">
+                <button type="submit" name="update" class="btn btn-primary">Speichern</button>
+                <a class="btn btn-outline-danger" href="{% url 'wbsa:street_list' %}">Abbrechen</a>
+        </div>
+    </form>
+
+{% endblock data %}
+
+
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block titel %}Gebiete und Fahrzeuge{% endblock titel %}
+
+{% block data %}
+
+{% if area_list %}
+<div class="my-md-3">
+<h4>Fahrzeuge</h4>
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th><input type="checkbox" class="toggle form-check-input">
+            </th><th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for area in area_list %}
+    {% if area.is_parent %}
+        <tr>
+            <td><input type="checkbox" class="toggle form-check-input"></td>
+            <td><a href="{% url 'wbsa:area_view' area.id %}">{{area.name}}</td>
+            <td class="noprint text-end text-nowrap">
+                <a class="btn btn-sm btn-warning" href="{% url 'wbsa:area_edit' area.id %}" type="button">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+        </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+    <button type="submit" name="_delete" class="btn btn-danger btn-sm">
+        <i class="bi bi-trash3"></i> Delete Selected
+    </button>
+</div>
+<div class="my-md-3">
+<h4>Gebiete</h4>
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th><input type="checkbox" class="toggle form-check-input"></th>
+            <th>Name</th>
+            <th>Fahrzeug</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for area in area_list %}
+    {% if not area.is_parent %}
+        <tr>
+            <td><input type="checkbox" class="toggle form-check-input"></td>
+            <td><a href="{% url 'wbsa:area_view' area.id %}">{{area.name}}</td>
+            <td><a href="{% url 'wbsa:area_view' area.id %}">{{area.parent}}</td>
+            <td class="noprint text-end text-nowrap">
+                <a class="btn btn-sm btn-warning" href="{% url 'wbsa:area_edit' area.id %}" type="button">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+        </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+    <button type="submit" name="_delete" class="btn btn-danger btn-sm">
+        <i class="bi bi-trash3"></i> Delete Selected
+    </button>
+</div>
+{% else %}
+<li>Keine Gebiete oder Fahrzeuge angelegt!</li>
+</ul>
+{% endif %}
+{% endblock data %}

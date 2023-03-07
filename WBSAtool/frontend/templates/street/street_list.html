@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block titel %}Straßen{% endblock titel %}
+
+{% block data %}
+
+{% if street_list %}
+<div class="my-md-3">
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th><input type="checkbox" class="toggle form-check-input" id="select_all"></th>
+            <th>Name</th>
+            <th>Gebiet</th>
+            <th>Fahrzeug</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for street in street_list %}
+        <tr>
+            <td><input type="checkbox" class="toggle form-check-input" id="{{street.id}}" name="select_row"></td>
+            <td>{{street.name}}</td>
+            <td>{{street.area}}</td>
+            <td>{{street.area.parent}}</td>
+            <td class="noprint text-end text-nowrap">
+                <a class="btn btn-sm btn-warning" href="{% url 'wbsa:street_edit' street.id %}" type="button">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <button type="submit" name="delete" class="btn btn-danger btn-sm">
+        <i class="bi bi-trash3"></i> Delete Selected
+    </button>
+    <a type="submit" name="bulk" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
+        <i class="bi bi-stack"></i> Massenimport
+    </a>
+
+</div>
+{% else %}
+Keine Straßen angelegt!
+{% endif %}
+{% endblock data %}

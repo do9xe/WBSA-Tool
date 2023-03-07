@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block titel %}Abholungen{% endblock titel %}
+
+{% block data %}
+
+{% if appointment_list %}
+<div class="my-md-3">
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th><input type="checkbox" class="toggle form-check-input" id="select_all"></th>
+            <th>Name</th>
+            <th>Straße</th>
+            <th>Uhrzeit</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for appointment in appointment_list %}
+        <tr>
+            <td><input type="checkbox" class="toggle form-check-input" id="{{appointment.id}}" name="select_row"></td>
+            <td>{{appointment.contact_name}}</td>
+            <td>{{appointment.street}}</td>
+            <td>{{appointment.timeslot.date}} {{appointment.timeslot.time_from}}-{{appointment.timeslot.time_to}}</td>
+            <td class="noprint text-end text-nowrap">
+                <a class="btn btn-sm btn-success" href="" type="button">
+                    <i class="bi bi-info-circle"></i>
+                </a>
+                <a class="btn btn-sm btn-warning" href="" type="button">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <button type="submit" name="delete" class="btn btn-danger btn-sm">
+        <i class="bi bi-trash3"></i> Delete Selected
+    </button>
+</div>
+{% else %}
+Keine Abholungen angelegt!
+{% endif %}
+{% endblock data %}

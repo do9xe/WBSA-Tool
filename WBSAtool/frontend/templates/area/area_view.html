@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titel %}Details von {{ area.name }}{% endblock titel %}
+
+{% block data %}
+
+Parent: {{ area.parent }}
+<ul>
+{% for street in street_list %}
+    <li>{{ street.name }}</li>
+{% endfor %}
+</ul>
+
+{% endblock data %}
