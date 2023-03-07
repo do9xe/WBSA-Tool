@@ -160,3 +160,12 @@ function autocomplete(inp, arr) {
       closeAllLists(e.target);
   });
 }
+
+// Einblenden von einem Fenster mit den Details einer Abholung
+async function showAppointmentDetails(appointmentID) {
+    const modalContentDIV = document.getElementById("appointment_detail");
+    const response = await fetch(`/wbsa/appointment/${appointmentID}?format=modal`);
+    modalContentDIV.innerHTML = await response.text();
+    const myModal = new bootstrap.Modal(document.getElementById("appointment_modal"));
+    myModal.show();
+}

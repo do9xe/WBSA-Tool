@@ -33,13 +33,9 @@ class Timeslot(models.Model):
     date = models.DateField()
     time_from = models.TimeField()
     time_to = models.TimeField()
-    area = models.ForeignKey('Area',
-                             on_delete=models.SET_NULL,
-                             null=True,
-                             blank=True)
 
     def __str__(self):
-        return f"{self.date}_{self.time_from}"
+        return f"{self.date}_{self.time_from}_{self.time_to}"
 
 
 class Appointment(models.Model):

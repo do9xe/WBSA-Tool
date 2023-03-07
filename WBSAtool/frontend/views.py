@@ -115,8 +115,15 @@ def appointment_list(request):
     return render(request, 'appointment/appointment_list.html', context)
 
 
+def appointment_view(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    if request.GET['format'] == "modal":
+        context = {'appointment': appointment}
+        return render(request, 'appointment/appointment_modal.html', context)
+
+
 def appointment_edit(request, appointment_id):
-    pass
+    return HttpResponse("noch nicht implementiert")
 
 
 def appointment_new(request):
