@@ -98,10 +98,27 @@ def street_bulkadd(request):
     if request.method == 'GET':
         return render(request, 'street/street_bulk_add.html')
     if request.method == 'POST':
-        for street in request.POST['data'].split("\r\n"):
-            newStreet = Street(name=street)
-            newStreet.save()
-        return HttpResponseRedirect(reverse('wbsa:street_list'))
+        ImportList = request.POST['data'].split("\r\n")
+        header_raw = ImportList.pop(0)
+        header = header_raw.split(",")
+        if (header[0] == "street") and (header[1] == "area"):
+            for line in ImportList:
+                street = line.split(",")[0]
+                newStreet = Street(name=street)
+                if len(line.split(",")) > 1:
+                    try:
+                        area_name = line.split(",")[1]
+                        AreaObject = Area.objects.get(name=area_name)
+                        newStreet.area = AreaObject
+                    except Area.DoesNotExist as e:
+                        pass
+                newStreet.save()
+            return HttpResponseRedirect(reverse('wbsa:street_list'))
+        else:
+            error_message = f"Falscher CSV-Header: {header_raw}"
+            context = {"error_message": error_message}
+            return render(request, "error_page.html", context)
+
 
 def timeslot_list(request):
     TimeslotList = Timeslot.objects.all()

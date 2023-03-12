@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block titel %}Es ist ein Fehler aufgetreten{% endblock titel %}
+
+{% block data %}
+
+Es ist ein Fehler auf der vorherigen Seite aufgetreten. Die Fehlermeldung:<br>
+{{ error_message }}
+
+{% endblock data %}
