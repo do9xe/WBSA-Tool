@@ -5,7 +5,8 @@
 {% block data %}
 
 {% if street_list %}
-<div class="my-md-3">
+<form method="post"  class="my-md-3">
+    {% csrf_token %}
 <table class="table">
     <thead class="table-dark">
         <tr>
@@ -19,7 +20,7 @@
     <tbody>
     {% for street in street_list %}
         <tr>
-            <td><input type="checkbox" class="toggle form-check-input" id="{{street.id}}" name="select_row"></td>
+            <td><input type="checkbox" class="toggle form-check-input" value="{{street.id}}" name="select_row"></td>
             <td>{{street.name}}</td>
             <td>{{street.area}}</td>
             <td>{{street.area.parent}}</td>
@@ -32,14 +33,13 @@
     {% endfor %}
     </tbody>
 </table>
-    <button type="submit" name="delete" class="btn btn-danger btn-sm">
+    <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm">
         <i class="bi bi-trash3"></i> Delete Selected
     </button>
-    <a type="submit" name="bulk" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
+    <a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
         <i class="bi bi-stack"></i> Massenimport
     </a>
-
-</div>
+</form>
 {% else %}
 Keine Straßen angelegt!
 {% endif %}

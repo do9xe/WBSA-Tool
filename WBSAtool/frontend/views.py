@@ -72,9 +72,15 @@ def area_new(request):
 
 
 def street_list(request):
-    StreetList = Street.objects.all()
-    context = {'street_list': StreetList}
-    return render(request, 'street/street_list.html', context)
+    if request.method == 'GET':
+        StreetList = Street.objects.all()
+        context = {'street_list': StreetList}
+        return render(request, 'street/street_list.html', context)
+    if request.method == 'POST':
+        if request.POST['action'] == "delete":
+            for id in request.POST.getlist('select_row'):
+                Street.objects.get(id=int(id)).delete()
+            return HttpResponseRedirect(reverse('wbsa:street_list'))
 
 
 def street_edit(request, street_id):
