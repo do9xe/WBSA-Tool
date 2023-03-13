@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+{% endblock head %}
+
+{% block jsfooter %}
+<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+    // Creating map options
+    var mapOptions = {
+        center: [48.99707935, 8.47255828438081],
+        zoom: 15
+    }
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
+    // Creating a Layer object
+    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    // Adding layer to the map
+    map.addLayer(layer);
+
+    let locations = [
+{% for appointment in appointment_list %}
+        {
+            "id": {{appointment.id}},
+            "lat": {{appointment.lat}},
+            "long": {{appointment.lon}},
+            "title": "{{appointment.contact_name}}",
+            "address": "{{appointment.street}} {{appointment.house_number}}",
+            "date": "{{appointment.timeslot.date}}"
+        },
+{% endfor %}
+    ]
+
+    let popupOption = {
+        "closeButton":false
+    }
+
+    locations.forEach(element => {
+        new L.Marker([element.lat,element.long]).addTo(map)
+        .on("mouseover",event =>{
+            event.target.bindPopup('<div>'+element.title+'<br>'+element.address+'<br>Abholdatum:'+element.date+'</div>',popupOption).openPopup();
+        })
+        .on("mouseout", event => {
+            event.target.closePopup();
+        })
+    });
+</script>
+{% endblock jsfooter%}
+
+{% block data %}
+<div id="map" style="width: 100%; height: 750px"></div>
+{% endblock data %}

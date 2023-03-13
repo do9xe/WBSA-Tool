@@ -11,6 +11,7 @@
     <!-- Lokale Funktionen der Seite -->
     <script type="text/javascript" src="{% static 'wbsa.js'%}"></script>
     <link rel="stylesheet" href="{% static 'wbsa.css'%}">
+    {% block head %}{% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -31,6 +32,7 @@
                 <a href="{% url 'wbsa:street_list' %}" class="nav-item nav-link px-3"><i class="bi bi-signpost-split"></i> Straßen</a>
                 <a href="{% url 'wbsa:timeslot_list' %}" class="nav-item nav-link px-3"><i class="bi bi-calendar-week"></i> Zeitslots</a>
                 <a href="{% url 'wbsa:appointment_list' %}" class="nav-item nav-link px-3"><i class="bi bi-houses"></i> Abholungen</a>
+                <a href="{% url 'wbsa:appointment_map' %}" class="nav-item nav-link px-3"><i class="bi bi-geo-alt"></i> Karte</a>
             </div>
             <div class="navbar-nav ms-auto">
                 <a href="{% url 'wbsa:appointment_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neue Abholung</a>
@@ -47,5 +49,6 @@
 </div>
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    {% block jsfooter %}{% endblock %}
 </body>
 </html>

@@ -155,3 +155,9 @@ def appointment_new(request):
         TimeslotList = Timeslot.objects.all()
         context = {"street_list": StreetList, 'timeslot_list': TimeslotList}
         return render(request, 'appointment/appointment_edit.html', context)
+
+
+def appointment_map(request):
+    AppointmentList = Appointment.objects.all()
+    context = {'appointment_list': AppointmentList}
+    return render(request, 'appointment/map.html', context)

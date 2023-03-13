@@ -1,7 +1,5 @@
 from django.db import models
-
-
-# Create your models here.
+import requests
 
 
 class Area(models.Model):
@@ -48,11 +46,35 @@ class Appointment(models.Model):
                                  on_delete=models.CASCADE,
                                  null=True)
     text = models.CharField(max_length=200,
-                            null=True)
+                            null=True,
+                            blank=True)
     phone = models.CharField(max_length=200,
-                             null=True)
+                             null=True,
+                             blank=True)
     email = models.CharField(max_length=200,
-                             null=True)
+                             null=True,
+                             blank=True)
+    lat = models.CharField(max_length=200,
+                             null=True,
+                             blank=True)
+    lon = models.CharField(max_length=200,
+                             null=True,
+                             blank=True)
 
     def __str__(self):
-        return f"{self.contact_name}_{self.street.name}_{self.house_number}"
+        return f"{self.contact_name}, {self.street.name} {self.house_number}"
+
+    def save(self, *args, **kwargs):
+        if (self.lat == None) or (self.lon == None):
+            url = "https://nominatim.openstreetmap.org/search.php"
+            params = {
+                "street": f"{self.street} {self.house_number}",
+                "city": "Karlsruhe",
+                "postalcode": "76227",
+                "format": "jsonv2"
+            }
+            r = requests.get(url, params=params)
+            result = r.json()[0]
+            self.lat = result['lat']
+            self.lon = result['lon']
+        super(Appointment, self).save(*args, **kwargs)
