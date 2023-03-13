@@ -41,6 +41,9 @@
     </a>
 </form>
 {% else %}
-Keine Straßen angelegt!
+Keine Straßen angelegt!<br>
+<a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
+        <i class="bi bi-stack"></i> Massenimport
+</a>
 {% endif %}
 {% endblock data %}
