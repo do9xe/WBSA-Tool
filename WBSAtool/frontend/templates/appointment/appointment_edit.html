@@ -14,38 +14,38 @@
                 <h5 class="offset-sm-3">Kontaktdaten</h5>
             </div>
 	        <div class="row mb-3">
-                <label for="name" class="col-sm-3 col-form-label text-lg-end">Name</label>
+                <label for="name" class="col-sm-3 col-form-label text-lg-end">Name*</label>
                 <div class="col">
-                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" id="name">
+                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name">
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="parent" class="col-sm-3 col-form-label text-lg-end">Straße</label>
+                <label for="street" class="col-sm-3 col-form-label text-lg-end">Straße*</label>
                 <div class="col autocomplete">
-                    <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street_field" autocomplete="off">
+                    <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street" placeholder="Straße" autocomplete="off">
                     <script>
                         var streets = [{% for street in street_list %}"{{street.name}}",{% endfor %}];
-                        autocomplete(document.getElementById("street_field"), streets);
+                        autocomplete(document.getElementById("street"), streets);
                     </script>
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="name" class="col-sm-3 col-form-label text-lg-end">Hausnummer</label>
+                <label for="house_number" class="col-sm-3 col-form-label text-lg-end">Hausnummer*</label>
                 <div class="col">
-                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" placeholder="Name" id="name">
+                    <input type="text" name="house_number" value="{{ area.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="name" class="col-sm-3 col-form-label text-lg-end">Telefon</label>
+                <label for="phone" class="col-sm-3 col-form-label text-lg-end">Telefon</label>
                 <div class="col">
-                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" placeholder="Name" id="name">
+                    <input type="text" name="phone" value="{{ area.phone }}" maxlength="64" class="form-control" placeholder="Telefon-Nummer" id="phone">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="name" class="col-sm-3 col-form-label text-lg-end">EMail</label>
+                <label for="email" class="col-sm-3 col-form-label text-lg-end">EMail</label>
                 <div class="col">
-                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" placeholder="Name" id="name">
+                    <input type="text" name="email" value="{{ area.email }}" maxlength="64" class="form-control" placeholder="E-Mail Adresse" id="email">
                 </div>
             </div>
         </div>
@@ -54,12 +54,12 @@
                 <h5 class="offset-sm-3">Abholung</h5>
             </div>
             <div class="row mb-3">
-                <label for="parent" class="col-sm-3 col-form-label text-lg-end">Zeitslot</label>
+                <label for="timeslot" class="col-sm-3 col-form-label text-lg-end">Zeitslot*</label>
                 <div class="col">
-                    <select class="form-select" name="parent" id="parent">
+                    <select class="form-select" name="timeslot" id="timeslot">
                         <option value="None">None</option>
                         {% for timeslot in timeslot_list %}
-                        <option value="{{street.id}}"{%if appointment.timeslot == timeslot %}selected{%endif%}>{{timeslot.date}}, {{timeslot.time_from}} bis {{timeslot.time_to}}</option>
+                        <option value="{{timeslot.id}}"{%if appointment.timeslot == timeslot %}selected{%endif%}>{{timeslot.date}}, {{timeslot.time_from}} bis {{timeslot.time_to}}</option>
                         {% endfor %}
                     </select>
                 </div>

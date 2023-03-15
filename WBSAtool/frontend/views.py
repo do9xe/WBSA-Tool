@@ -161,7 +161,23 @@ def appointment_new(request):
         TimeslotList = Timeslot.objects.all()
         context = {"street_list": StreetList, 'timeslot_list': TimeslotList}
         return render(request, 'appointment/appointment_edit.html', context)
-
+    if request.method == "POST":
+        contact_name = request.POST['name']
+        street = get_object_or_404(Street, name=request.POST['street'])
+        house_number = request.POST['house_number']
+        timeslot = get_object_or_404(Timeslot, id=request.POST['timeslot'])
+        text = ""
+        phone = request.POST['phone']
+        email = request.POST['email']
+        newAppointment = Appointment(contact_name=contact_name, street=street, house_number=house_number, timeslot=timeslot)
+        if text:
+            newAppointment.text = text
+        if phone:
+            newAppointment.phone = phone
+        if email:
+            newAppointment.email = email
+        newAppointment.save()
+        return HttpResponseRedirect(reverse('wbsa:appointment_map'))
 
 def appointment_map(request):
     AppointmentList = Appointment.objects.all()
