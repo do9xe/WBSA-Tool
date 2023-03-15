@@ -5,31 +5,38 @@ from django.urls import reverse
 from .models import Area, Street, Timeslot, Appointment
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
-
-
 def area_list(request):
-    AreaList = Area.objects.all()
-    context = {'area_list': AreaList}
-    return render(request, 'area/area_list.html', context)
+    if request.method == 'GET':
+        AreaList = Area.objects.all()
+        context = {'area_list': AreaList}
+        return render(request, 'area/area_list.html', context)
+    if request.method == 'POST':
+        if request.POST['action'] == "delete_areas":
+            for id in request.POST.getlist('select_row'):
+                Area.objects.get(id=int(id)).delete()
+            return HttpResponseRedirect(reverse('wbsa:area_list'))
+        elif request.POST['action']:
+            id = int(request.POST['action'])
+            Area.objects.get(id=id).delete()
+            return HttpResponseRedirect(reverse('wbsa:area_list'))
 
 
 def area_view(request, area_id):
-    area = get_object_or_404(Area, id=area_id)
-    if area.is_parent:
-        AreaList = Area.objects.filter(parent=area)
-        StreetList = []
-        for subarea in AreaList:
-            l = Street.objects.filter(area=subarea)
-            for street in l:
-                StreetList.append(street)
-        print(StreetList)
+    if request.GET['format'] == "modal":
+        area = get_object_or_404(Area, id=area_id)
+        if area.is_parent:
+            AreaList = Area.objects.filter(parent=area)
+            StreetList = []
+            for subarea in AreaList:
+                l = Street.objects.filter(area=subarea)
+                for street in l:
+                    StreetList.append(street)
+        else:
+            StreetList = Street.objects.filter(area=area)
+        context = {'area': area, 'street_list': StreetList}
+        return render(request, 'area/area_modal.html', context)
     else:
-        StreetList = Street.objects.filter(area=area)
-    context = {'area': area, 'street_list': StreetList}
-    return render(request, 'area/area_view.html', context)
-
+        return HttpResponse("Error, only intended von indirect use")
 
 def area_edit(request, area_id):
     area = get_object_or_404(Area, id=area_id)
@@ -50,7 +57,6 @@ def area_edit(request, area_id):
             area.parent = None
         area.save()
         return HttpResponseRedirect(reverse('wbsa:area_list'))
-        # return HttpResponseRedirect(reverse('wbsa:area_list', args=(area.id,)))
 
 
 def area_new(request):

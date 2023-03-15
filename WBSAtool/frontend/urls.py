@@ -1,10 +1,10 @@
 from django.urls import path
-
+from django.views.generic.base import RedirectView
 from . import views
 
 app_name = 'wbsa'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', RedirectView.as_view(url='appointment/map'), name='index'),
     path('area/list', views.area_list, name='area_list'),
     path('area/<int:area_id>', views.area_view, name='area_view'),
     path('area/new', views.area_new, name='area_new'),

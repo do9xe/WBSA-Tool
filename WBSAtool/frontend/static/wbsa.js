@@ -164,8 +164,16 @@ function autocomplete(inp, arr) {
 // Einblenden von einem Fenster mit den Details einer Abholung
 async function showAppointmentDetails(appointmentID) {
     const modalContentDIV = document.getElementById("appointment_detail");
-    const response = await fetch(`/wbsa/appointment/${appointmentID}?format=modal`);
+    const response = await fetch(`/appointment/${appointmentID}?format=modal`);
     modalContentDIV.innerHTML = await response.text();
     const myModal = new bootstrap.Modal(document.getElementById("appointment_modal"));
+    myModal.show();
+}
+
+async function showAreaDetails(areaID) {
+    const modalContentDIV = document.getElementById("area_detail");
+    const response = await fetch(`/area/${areaID}?format=modal`);
+    modalContentDIV.innerHTML = await response.text();
+    const myModal = new bootstrap.Modal(document.getElementById("area_modal"));
     myModal.show();
 }

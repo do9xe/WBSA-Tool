@@ -22,13 +22,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <div class="nav-item dropdown px-2">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-map"></i> Gebiete</a>
-                    <div class="dropdown-menu">
-                        <a href="{% url 'wbsa:area_list' %}" class="dropdown-item">Gebietsliste</a>
-                        <a href="{% url 'wbsa:area_new' %}" class="dropdown-item">Neues Gebiet</a>
-                    </div>
-                </div>
+                <a href="{% url 'wbsa:area_list' %}" class="nav-item nav-link px-3"><i class="bi bi-map"></i> Gebiete</a>
                 <a href="{% url 'wbsa:street_list' %}" class="nav-item nav-link px-3"><i class="bi bi-signpost-split"></i> Straßen</a>
                 <a href="{% url 'wbsa:timeslot_list' %}" class="nav-item nav-link px-3"><i class="bi bi-calendar-week"></i> Zeitslots</a>
                 <a href="{% url 'wbsa:appointment_list' %}" class="nav-item nav-link px-3"><i class="bi bi-houses"></i> Abholungen</a>

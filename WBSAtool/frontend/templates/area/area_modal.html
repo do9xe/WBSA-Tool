@@ -1,0 +1,7 @@
+Gebiet: {{ area.name }}<br>
+Fahrzeug: {{ area.parent }}<br>
+<ul>
+{% for street in street_list %}
+    <li>{{ street.name }}</li>
+{% endfor %}
+</ul>
