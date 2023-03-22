@@ -4,9 +4,9 @@
 
 {% block data %}
 {% if appointment.id %}
-    <form autocomplete="new-password" action="{% url 'wbsa:appointment_edit' appointment.id %}" method="post" class="form-object-edit mt-5">
+    <form autocomplete="off" action="{% url 'wbsa:appointment_edit' appointment.id %}" method="post" class="form-object-edit mt-5">
 {% else %}
-    <form autocomplete="new-password" action="{% url 'wbsa:appointment_new' %}" method="post" class="form-object-edit mt-5">
+    <form autocomplete="off" action="{% url 'wbsa:appointment_new' %}" method="post" class="form-object-edit mt-5">
 {% endif %}
     {% csrf_token %}
         <div class="field-group my-5">
@@ -25,7 +25,7 @@
                 <div class="col autocomplete">
                     <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street" placeholder="Straße" autocomplete="off">
                     <script>
-                        var streets = [{% for street in street_list %}"{{street.name}}",{% endfor %}];
+                        const streets = [{% for street in street_list %}"{{street.name}}",{% endfor %}];
                         autocomplete(document.getElementById("street"), streets);
                     </script>
                 </div>
@@ -66,14 +66,15 @@
                     <select class="form-select" name="timeslot" id="timeslot">
                         <option value="None">None</option>
                         {% for timeslot in timeslot_list %}
-                        <option value="{{timeslot.id}}"{%if appointment.timeslot == timeslot %}selected{%endif%}>{{timeslot.date}}, {{timeslot.time_from}} bis {{timeslot.time_to}}</option>
+                        <option value="{{timeslot.id}}" {%if appointment.timeslot == timeslot %}selected{%endif%}>{{timeslot.date}}, {{timeslot.time_from}} bis {{timeslot.time_to}}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-        <div class="text-end my-3">
-                <button type="submit" name="update" class="btn btn-primary">Speichern</button>
-                <a class="btn btn-outline-danger" href="{% url 'wbsa:appointment_new' %}">Abbrechen</a>
+            <div class="text-end my-3">
+                    <button type="submit" name="update" class="btn btn-primary">Speichern</button>
+                    <a class="btn btn-outline-danger" href="{% url 'wbsa:appointment_new' %}">Abbrechen</a>
+            </div>
         </div>
     </form>
 <div class="field-group my-5">

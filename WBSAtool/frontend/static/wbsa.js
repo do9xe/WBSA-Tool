@@ -187,3 +187,14 @@ async function getTimeslotSuggestions(street_name) {
     const response = await fetch(`/timeslot/suggestion?street=${street_name}`)
     suggestionDIV.innerHTML = await response.text();
 }
+
+// Zeitslot anhand des Vorschlages auswählen
+function acceptSuggestion(timeslot_id) {
+    const dropDown = document.getElementById("timeslot")
+    for (let i = 0; i < dropDown.options.length; i++) {
+        if (dropDown.options[i].value == timeslot_id) {
+            dropDown.options[i].selected = true;
+            return;
+        }
+    }
+}
