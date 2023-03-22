@@ -163,7 +163,7 @@ def appointment_edit(request, appointment_id):
         appointment.street = get_object_or_404(Street, name=request.POST['street'])
         appointment.house_number = request.POST['house_number']
         appointment.timeslot = get_object_or_404(Timeslot, id=request.POST['timeslot'])
-        appointment.text = ""
+        appointment.text = request.POST['text']
         appointment.phone = request.POST['phone']
         appointment.email = request.POST['email']
         appointment.save()
@@ -181,7 +181,7 @@ def appointment_new(request):
         street = get_object_or_404(Street, name=request.POST['street'])
         house_number = request.POST['house_number']
         timeslot = get_object_or_404(Timeslot, id=request.POST['timeslot'])
-        text = ""
+        text = request.POST['text']
         phone = request.POST['phone']
         email = request.POST['email']
         newAppointment = Appointment(contact_name=contact_name, street=street, house_number=house_number, timeslot=timeslot)
