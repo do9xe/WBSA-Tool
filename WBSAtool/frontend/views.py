@@ -138,6 +138,21 @@ def timeslot_list(request):
     return render(request, 'timeslot/timeslot_list.html', context)
 
 
+def timeslot_suggestion(request):
+    street = get_object_or_404(Street, name=request.GET['street'])
+    TimeslotList = Timeslot.objects.all()
+    SuggestionList = []
+    for Slot in TimeslotList:
+        count = Appointment.objects.filter(timeslot=Slot, street=street).count()
+        if count != 0:
+            suggestion = {"timeslot": Slot, "count": count}
+            SuggestionList.append(suggestion)
+    if len(SuggestionList) == 0:
+        return HttpResponse("")
+    context = {"suggestion_list": SuggestionList}
+    return render(request, "timeslot/timeslot_suggestion.html", context)
+
+
 def appointment_list(request):
     AppointmentList = Appointment.objects.all()
     context = {'appointment_list': AppointmentList}

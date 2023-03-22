@@ -95,10 +95,12 @@ function autocomplete(inp, arr) {
           /*execute a function when someone clicks on the item value (DIV element):*/
           b.addEventListener("click", function(e) {
               /*insert the value for the autocomplete text field:*/
-              inp.value = this.getElementsByTagName("input")[0].value;
+              const selection = this.getElementsByTagName("input")[0].value;
+              inp.value = selection;
               /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
               closeAllLists();
+              getTimeslotSuggestions(selection);
           });
           a.appendChild(b);
         }
@@ -161,7 +163,7 @@ function autocomplete(inp, arr) {
   });
 }
 
-// Einblenden von einem Fenster mit den Details einer Abholung
+// Einblenden eines Fensters mit den Details einer Abholung
 async function showAppointmentDetails(appointmentID) {
     const modalContentDIV = document.getElementById("appointment_detail");
     const response = await fetch(`/appointment/${appointmentID}?format=modal`);
@@ -170,10 +172,18 @@ async function showAppointmentDetails(appointmentID) {
     myModal.show();
 }
 
+// Einblenden eines Fensters mit den Details eines Gebietes
 async function showAreaDetails(areaID) {
     const modalContentDIV = document.getElementById("area_detail");
     const response = await fetch(`/area/${areaID}?format=modal`);
     modalContentDIV.innerHTML = await response.text();
     const myModal = new bootstrap.Modal(document.getElementById("area_modal"));
     myModal.show();
+}
+
+// Abrufen einer Liste mit Zeitraum-Vorschlägen auf Basis der Straße
+async function getTimeslotSuggestions(street_name) {
+    const suggestionDIV = document.getElementById("suggestion_list");
+    const response = await fetch(`/timeslot/suggestion?street=${street_name}`)
+    suggestionDIV.innerHTML = await response.text();
 }

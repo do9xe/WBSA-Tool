@@ -13,6 +13,7 @@ urlpatterns = [
     path('street/bulkadd', views.street_bulkadd, name='street_bulkadd'),
     path('street/<int:street_id>/edit', views.street_edit, name='street_edit'),
     path('timeslot/list', views.timeslot_list, name='timeslot_list'),
+    path('timeslot/suggestion', views.timeslot_suggestion, name='timeslot_suggestion'),
     path('appointment/list', views.appointment_list, name='appointment_list'),
     path('appointment/map', views.appointment_map, name='appointment_map'),
     path('appointment/new', views.appointment_new, name='appointment_new'),
