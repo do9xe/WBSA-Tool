@@ -3,8 +3,8 @@
 {% block titel %}Termin zur Abholung{% endblock titel %}
 
 {% block data %}
-{% if area.id %}
-    <form autocomplete="new-password" action="{% url 'wbsa:appointment_edit' area.id %}" method="post" class="form-object-edit mt-5">
+{% if appointment.id %}
+    <form autocomplete="new-password" action="{% url 'wbsa:appointment_edit' appointment.id %}" method="post" class="form-object-edit mt-5">
 {% else %}
     <form autocomplete="new-password" action="{% url 'wbsa:appointment_new' %}" method="post" class="form-object-edit mt-5">
 {% endif %}
@@ -16,7 +16,7 @@
 	        <div class="row mb-3">
                 <label for="name" class="col-sm-3 col-form-label text-lg-end">Name*</label>
                 <div class="col">
-                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name">
+                    <input type="text" name="name" value="{{ appointment.contact_name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name">
                 </div>
             </div>
 
@@ -33,19 +33,19 @@
             <div class="row mb-3">
                 <label for="house_number" class="col-sm-3 col-form-label text-lg-end">Hausnummer*</label>
                 <div class="col">
-                    <input type="text" name="house_number" value="{{ area.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number">
+                    <input type="text" name="house_number" value="{{ appointment.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number">
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="phone" class="col-sm-3 col-form-label text-lg-end">Telefon</label>
                 <div class="col">
-                    <input type="text" name="phone" value="{{ area.phone }}" maxlength="64" class="form-control" placeholder="Telefon-Nummer" id="phone">
+                    <input type="text" name="phone" value="{{ appointment.phone }}" maxlength="64" class="form-control" placeholder="Telefon-Nummer" id="phone">
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="email" class="col-sm-3 col-form-label text-lg-end">EMail</label>
                 <div class="col">
-                    <input type="text" name="email" value="{{ area.email }}" maxlength="64" class="form-control" placeholder="E-Mail Adresse" id="email">
+                    <input type="text" name="email" value="{{ appointment.email }}" maxlength="64" class="form-control" placeholder="E-Mail Adresse" id="email">
                 </div>
             </div>
         </div>

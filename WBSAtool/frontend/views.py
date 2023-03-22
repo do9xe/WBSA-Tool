@@ -152,7 +152,22 @@ def appointment_view(request, appointment_id):
 
 
 def appointment_edit(request, appointment_id):
-    return HttpResponse("noch nicht implementiert")
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    if request.method == 'GET':
+        StreetList = Street.objects.all()
+        TimeslotList = Timeslot.objects.all()
+        context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList}
+        return render(request, 'appointment/appointment_edit.html', context)
+    if request.method == "POST":
+        appointment.contact_name = request.POST['name']
+        appointment.street = get_object_or_404(Street, name=request.POST['street'])
+        appointment.house_number = request.POST['house_number']
+        appointment.timeslot = get_object_or_404(Timeslot, id=request.POST['timeslot'])
+        appointment.text = ""
+        appointment.phone = request.POST['phone']
+        appointment.email = request.POST['email']
+        appointment.save()
+        return HttpResponseRedirect(reverse('wbsa:appointment_list'))
 
 
 def appointment_new(request):

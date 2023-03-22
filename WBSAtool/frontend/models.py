@@ -65,16 +65,15 @@ class Appointment(models.Model):
         return f"{self.contact_name}, {self.street.name} {self.house_number}"
 
     def save(self, *args, **kwargs):
-        if (self.lat == None) or (self.lon == None):
-            url = "https://nominatim.openstreetmap.org/search.php"
-            params = {
-                "street": f"{self.street} {self.house_number}",
-                "city": "Karlsruhe",
-                "postalcode": "76227",
-                "format": "jsonv2"
-            }
-            r = requests.get(url, params=params)
-            result = r.json()[0]
-            self.lat = result['lat']
-            self.lon = result['lon']
+        url = "https://nominatim.openstreetmap.org/search.php"
+        params = {
+            "street": f"{self.street} {self.house_number}",
+            "city": "Karlsruhe",
+            "postalcode": "76227",
+            "format": "jsonv2"
+        }
+        r = requests.get(url, params=params)
+        result = r.json()[0]
+        self.lat = result['lat']
+        self.lon = result['lon']
         super(Appointment, self).save(*args, **kwargs)
