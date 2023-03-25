@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
 {% endblock head %}
 
 {% block jsfooter %}
-<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+ <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script>
     // Creating map options
     var mapOptions = {
@@ -36,15 +44,22 @@
         "closeButton":false
     }
 
+    var markers = new L.markerClusterGroup();
+    var bounds = [];
+
     locations.forEach(element => {
-        new L.Marker([element.lat,element.long]).addTo(map)
+        bounds.push([element.lat,element.long])
+        var marker = new L.Marker([element.lat,element.long])
         .on("mouseover",event =>{
             event.target.bindPopup('<div>'+element.title+'<br>'+element.address+'<br>Abholdatum:'+element.date+'</div>',popupOption).openPopup();
         })
         .on("mouseout", event => {
             event.target.closePopup();
         })
+        markers.addLayer(marker);
     });
+    map.addLayer(markers);
+    map.fitBounds(new L.LatLngBounds(bounds));
 </script>
 {% endblock jsfooter%}
 
