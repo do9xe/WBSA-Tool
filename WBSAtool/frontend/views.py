@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+import requests
 
 from .models import Area, Street, Timeslot, Appointment
 
@@ -213,3 +214,27 @@ def appointment_map(request):
     AppointmentList = Appointment.objects.all()
     context = {'appointment_list': AppointmentList}
     return render(request, 'appointment/map.html', context)
+
+
+def street_osm_import(request):
+    if request.method == "GET":
+        plz = request.GET['plz']
+        overpass_url = "https://overpass-api.de/api/interpreter"
+        overpass_query = f'''
+        [out:json][timeout:25];
+        area[postal_code="{plz}"];
+        way(area)[highway~"^(residential|living_street|secondary|tertiary)$"];
+        out;
+        '''
+        response = requests.get(overpass_url, params={'data': overpass_query})
+        raw_data = response.json()
+        street_list = []
+        for street in raw_data['elements']:
+            if "name" in street['tags']:
+                street_list.append(street['tags']['name'])
+        street_list = list(dict.fromkeys(street_list))
+        for street in street_list:
+            new_street = Street(name=street)
+            new_street.osm_imported = True
+            new_street.save()
+        return HttpResponse(str(street_list))

@@ -22,6 +22,7 @@ class Street(models.Model):
                              on_delete=models.SET_NULL,
                              null=True,
                              blank=True)
+    osm_imported = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

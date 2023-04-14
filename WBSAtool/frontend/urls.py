@@ -11,6 +11,7 @@ urlpatterns = [
     path('area/<int:area_id>/edit', views.area_edit, name='area_edit'),
     path('street/list', views.street_list, name='street_list'),
     path('street/bulkadd', views.street_bulkadd, name='street_bulkadd'),
+    path('street/osm_import', views.street_osm_import, name='street_osm_import'),
     path('street/<int:street_id>/edit', views.street_edit, name='street_edit'),
     path('timeslot/list', views.timeslot_list, name='timeslot_list'),
     path('timeslot/suggestion', views.timeslot_suggestion, name='timeslot_suggestion'),
