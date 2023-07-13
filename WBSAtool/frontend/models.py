@@ -46,9 +46,9 @@ class Appointment(models.Model):
     timeslot = models.ForeignKey('Timeslot',
                                  on_delete=models.CASCADE,
                                  null=True)
-    text = models.CharField(max_length=200,
-                            null=True,
-                            blank=True)
+    text = models.CharField(max_length=2000,
+                            blank=True,
+                            default="")
     phone = models.CharField(max_length=200,
                              null=True,
                              blank=True)

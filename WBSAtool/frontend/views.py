@@ -186,10 +186,15 @@ def timeslot_suggestion(request):
 
 
 def appointment_list(request):
-    AppointmentList = Appointment.objects.all()
-    context = {'appointment_list': AppointmentList}
-    return render(request, 'appointment/appointment_list.html', context)
-
+    if request.method == "GET":
+        AppointmentList = Appointment.objects.all()
+        context = {'appointment_list': AppointmentList}
+        return render(request, 'appointment/appointment_list.html', context)
+    elif request.method == "POST":
+        if request.POST['action'] == "delete":
+            for id in request.POST.getlist('select_row'):
+                Appointment.objects.get(id=int(id)).delete()
+            return HttpResponseRedirect(reverse('wbsa:appointment_list'))
 
 def appointment_view(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
