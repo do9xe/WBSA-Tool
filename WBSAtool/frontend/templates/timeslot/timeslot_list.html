@@ -5,7 +5,8 @@
 {% block data %}
 
 {% if timeslot_list %}
-<div class="my-md-3">
+<form class="my-md-3" method="post">
+{% csrf_token %}
 <table class="table">
     <thead class="table-dark">
         <tr>
@@ -19,12 +20,12 @@
     <tbody>
     {% for timeslot in timeslot_list %}
         <tr>
-            <td><input type="checkbox" class="toggle form-check-input" name="select"></td>
+            <td><input type="checkbox" class="toggle form-check-input" name="select_row" value="{{timeslot.id}}"></td>
             <td>{{timeslot.date}}</td>
             <td>{{timeslot.time_from}}</td>
             <td>{{timeslot.time_to}}</td>
             <td class="noprint text-end text-nowrap">
-                <a class="btn btn-sm btn-warning" href="" type="button">
+                <a class="btn btn-sm btn-warning" href="{% url 'wbsa:timeslot_edit' timeslot.id %}" type="button">
                     <i class="bi bi-pencil-square"></i>
                 </a>
             </td>
@@ -32,10 +33,29 @@
     {% endfor %}
     </tbody>
 </table>
-    <button type="submit" name="delete" class="btn btn-danger btn-sm">
-        <i class="bi bi-trash3"></i> Delete Selected
-    </button>
+    <a href="{% url 'wbsa:timeslot_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neuer Abholungszeitraum</a>
+    <a href="#deleteConfirm" class="btn btn-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i> Ausgewählte Löschen</a>
+
+
+<div id="deleteConfirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Löschen von Zeiträumen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            Möchtest du die ausgewählten Zeiträume wirklich löschen?<br><br>
+                <div class="text-danger">Dies löscht auch automatisch <b>ALLE</b> Abholungen, welche in diesem Zeitraum stattfinden. Die Daten können nicht wiederhergestellt werden.</div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" name="action" value="delete" class="btn btn-danger">Löschen</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+            </div>
+        </div>
+    </div>
 </div>
+</form>
 {% else %}
 Keine Abholungszeiträume angelegt!
 {% endif %}

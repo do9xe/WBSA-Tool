@@ -134,9 +134,40 @@ def street_bulkadd(request):
 
 
 def timeslot_list(request):
-    TimeslotList = Timeslot.objects.all()
-    context = {'timeslot_list': TimeslotList}
-    return render(request, 'timeslot/timeslot_list.html', context)
+    if request.method == "GET":
+        TimeslotList = Timeslot.objects.all()
+        context = {'timeslot_list': TimeslotList}
+        return render(request, 'timeslot/timeslot_list.html', context)
+    elif request.method == 'POST':
+        if request.POST['action'] == "delete":
+            for id in request.POST.getlist('select_row'):
+                Timeslot.objects.get(id=int(id)).delete()
+            return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
+
+
+def timeslot_new(request):
+    if request.method == "GET":
+        return render(request, "timeslot/timeslot_edit.html")
+    elif request.method == "POST":
+        timeslot = Timeslot()
+        timeslot.date = request.POST['date']
+        timeslot.time_from = request.POST['time_from']
+        timeslot.time_to = request.POST['time_to']
+        timeslot.save()
+        return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
+
+
+def timeslot_edit(request, timeslot_id):
+    timeslot = get_object_or_404(Timeslot, id=timeslot_id)
+    if request.method == "GET":
+        context = {"timeslot": timeslot}
+        return render(request, "timeslot/timeslot_edit.html", context)
+    elif request.method == "POST":
+        timeslot.date = request.POST['date']
+        timeslot.time_from = request.POST['time_from']
+        timeslot.time_to = request.POST['time_to']
+        timeslot.save()
+        return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
 
 
 def timeslot_suggestion(request):
@@ -209,6 +240,7 @@ def appointment_new(request):
             newAppointment.email = email
         newAppointment.save()
         return HttpResponseRedirect(reverse('wbsa:appointment_map'))
+
 
 def appointment_map(request):
     AppointmentList = Appointment.objects.all()
