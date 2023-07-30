@@ -33,12 +33,28 @@
     {% endfor %}
     </tbody>
 </table>
-    <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm">
-        <i class="bi bi-trash3"></i> Delete Selected
-    </button>
+    <a href="#deleteConfirm" class="btn btn-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i> Ausgewählte Löschen</a>
     <a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
         <i class="bi bi-stack"></i> Massenimport
     </a>
+<div id="deleteConfirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Löschen von Straßen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            Möchtest du die ausgewählten Straßen wirklich löschen?<br><br>
+                <div class="text-danger">Dies löscht auch automatisch <b>ALLE</b> Abholungen, welche in dieser Straße stattfinden. Die Daten können nicht wiederhergestellt werden.</div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" name="action" value="delete" class="btn btn-danger">Löschen</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
 {% else %}
 Keine Straßen angelegt!<br>
