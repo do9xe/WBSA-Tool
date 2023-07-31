@@ -62,10 +62,8 @@ def area_edit(request, area_id):
 
 def area_new(request):
     if request.method == 'GET':
-        area = {}
-        area['name'] = "new Area"
         AreaList = Area.objects.filter(is_parent=True)
-        context = {'area': area, 'parent_area_list': AreaList}
+        context = {'parent_area_list': AreaList}
         return render(request, 'area/area_edit.html', context)
     if request.method == 'POST':
         newArea = Area(name=request.POST['name'])
