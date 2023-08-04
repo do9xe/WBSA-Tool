@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
-from . import views
+from . import views, auth_views
 
 app_name = 'wbsa'
 urlpatterns = [
@@ -22,4 +22,6 @@ urlpatterns = [
     path('appointment/new', views.appointment_new, name='appointment_new'),
     path('appointment/<int:appointment_id>', views.appointment_view, name='appointment_view'),
     path('appointment/<int:appointment_id>/edit', views.appointment_edit, name='appointment_edit'),
+    path('auth/login', auth_views.login_user, name='login'),
+    path('auth/logout', auth_views.logout_user, name='logout')
 ]

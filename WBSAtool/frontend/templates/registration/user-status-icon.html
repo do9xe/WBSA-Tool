@@ -1,0 +1,35 @@
+<div class="mx-3 nav-item dropdown">
+<div class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+{% load static %}
+{% if user.is_authenticated %}
+    <img src="{% static 'icons8-checkmark.svg' %}" class="rounded-circle" height="30" width="30">
+</div>
+{# Das was im Dropdown steht #}
+<div class="dropdown-menu dropdown-menu-end ">
+    <p class="dropdown-item-text text-center">
+        <strong class="text-nowrap">{{ user.first_name }} {{ user.last_name }}</strong><br>
+        <small class="text-muted">{{ user.username }}</small>
+    </p>
+    <hr class="dropdown-divider">
+    <a class="dropdown-item disabled" href="#"><i class="fas fa-user mr-2"></i>Account</a>
+    <a class="dropdown-item disabled" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
+    <a class="dropdown-item" href="{% url 'wbsa:logout' %}"><i class="fas fa-power-off mr-2"></i>Logout</a>
+{# hier hört das dropdown dann auf #}
+{% else %}
+{# Das was im Dropdown steht #}
+    <img src="{% static 'icons8-unavailable.svg' %}" class="rounded-circle" height="30" width="30">
+</div>
+<div class="dropdown-menu dropdown-menu-end w-auto">
+    <a class="dropdown-item" href="{% url 'wbsa:login' %}"><i class="fas fa-power-off mr-2"></i>Login</a>
+{# hier hört das dropdown dann auf #}
+{% endif %}
+</div>
+
+</div>
+
+
+
+
+
+
+

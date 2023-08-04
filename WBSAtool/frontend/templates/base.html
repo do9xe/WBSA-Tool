@@ -22,6 +22,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
+    {% if user.is_authenticated %}
             <div class="navbar-nav">
                 <a href="{% url 'wbsa:area_list' %}" class="nav-item nav-link px-3"><i class="bi bi-map"></i> Gebiete</a>
                 <a href="{% url 'wbsa:street_list' %}" class="nav-item nav-link px-3"><i class="bi bi-signpost-split"></i> Straßen</a>
@@ -30,18 +31,30 @@
                 <a href="{% url 'wbsa:appointment_map' %}" class="nav-item nav-link px-3"><i class="bi bi-geo-alt"></i> Karte</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <a href="{% url 'wbsa:appointment_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neue Abholung</a>
+                <a href="" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neue Abholung</a>
+            </div>
+            <div class="navbar-nav">
+        {% else %}
+            <div class="navbar-nav ms-auto">
+        {% endif %}
+                {% include "registration/user-status-icon.html" %}
             </div>
         </div>
     </div>
 </nav>
 
+{% if user.is_authenticated %}
 <div class="container-md">
     <div class="px-md-3 py-md-3 my-md-3 bg-light">
         <h1 class="p-3">{% block titel %}{% endblock %}</h1>
-        {% block data %}{% endblock %}
+        {% block data %}{% endblock data %}
     </div>
 </div>
+{% else %}
+    {% block authform %}{% endblock authform %}
+{% endif %}
+
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     {% block jsfooter %}{% endblock %}

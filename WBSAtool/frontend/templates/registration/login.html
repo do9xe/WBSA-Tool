@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block authform %}
+<div class="row d-flex justify-content-center">
+    <form class="form-horizontal col-md-5 col-lg-4 col-xl-3 my-3 py-3 mx-3 px-3 border border-dark rounded-4 bg-secondary bg-opacity-10 text-center" name="LoginForm" method="post">
+        {% csrf_token %}
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
+        <div class="text mb-3">
+            <h4>Anmeldung</h4>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Nutzername" name="username">
+            <label for="floatingInput">Nutzername</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+          <label for="floatingPassword">Password</label>
+        </div>
+        <button class="btn btn-primary my-3" type="submit">Log In</button>
+    </form>
+</div>
+
+{% endblock %}
