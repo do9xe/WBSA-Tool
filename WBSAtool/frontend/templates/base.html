@@ -17,21 +17,21 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a href="#" class="navbar-brand pe-5"><i class="bi bi-tree-fill"></i> WBSA-Tool</a>
+        <a href="/" class="navbar-brand pe-5"><i class="bi bi-tree-fill"></i> WBSA-Tool</a>
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
     {% if user.is_authenticated %}
             <div class="navbar-nav">
-                <a href="{% url 'wbsa:area_list' %}" class="nav-item nav-link px-3"><i class="bi bi-map"></i> Gebiete</a>
-                <a href="{% url 'wbsa:street_list' %}" class="nav-item nav-link px-3"><i class="bi bi-signpost-split"></i> Straßen</a>
-                <a href="{% url 'wbsa:timeslot_list' %}" class="nav-item nav-link px-3"><i class="bi bi-calendar-week"></i> Zeitslots</a>
-                <a href="{% url 'wbsa:appointment_list' %}" class="nav-item nav-link px-3"><i class="bi bi-houses"></i> Abholungen</a>
+                {% if perms.frontend.view_area %}<a href="{% url 'wbsa:area_list' %}" class="nav-item nav-link px-3"><i class="bi bi-map"></i> Gebiete</a>{% endif %}
+                {% if perms.frontend.view_street %}<a href="{% url 'wbsa:street_list' %}" class="nav-item nav-link px-3"><i class="bi bi-signpost-split"></i> Straßen</a>{% endif %}
+                {% if perms.frontend.view_timeslot %}<a href="{% url 'wbsa:timeslot_list' %}" class="nav-item nav-link px-3"><i class="bi bi-calendar-week"></i> Zeitslots</a>{% endif %}
+                {% if perms.frontend.view_appointment %}<a href="{% url 'wbsa:appointment_list' %}" class="nav-item nav-link px-3"><i class="bi bi-houses"></i> Abholungen</a>{% endif %}
                 <a href="{% url 'wbsa:appointment_map' %}" class="nav-item nav-link px-3"><i class="bi bi-geo-alt"></i> Karte</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <a href="" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neue Abholung</a>
+                {% if perms.frontend.add_appointment %}<a href="{% url 'wbsa:appointment_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neue Abholung</a>{% endif %}
             </div>
             <div class="navbar-nav">
         {% else %}

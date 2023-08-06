@@ -1,13 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 import requests
 
 from .models import Area, Street, Timeslot, Appointment
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.view_area", raise_exception=True)
+@permission_required("frontend.delete_area", raise_exception=True)
 def area_list(request):
     if request.method == 'GET':
         AreaList = Area.objects.all()
@@ -24,7 +25,7 @@ def area_list(request):
             return HttpResponseRedirect(reverse('wbsa:area_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.view_area", raise_exception=True)
 def area_view(request, area_id):
     if request.GET['format'] == "modal":
         area = get_object_or_404(Area, id=area_id)
@@ -43,7 +44,7 @@ def area_view(request, area_id):
         return HttpResponse("Error, only intended von indirect use")
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.change_area", raise_exception=True)
 def area_edit(request, area_id):
     area = get_object_or_404(Area, id=area_id)
     if request.method == 'GET':
@@ -65,7 +66,7 @@ def area_edit(request, area_id):
         return HttpResponseRedirect(reverse('wbsa:area_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.add_area", raise_exception=True)
 def area_new(request):
     if request.method == 'GET':
         AreaList = Area.objects.filter(is_parent=True)
@@ -82,7 +83,8 @@ def area_new(request):
         return HttpResponseRedirect(reverse('wbsa:area_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.view_street", raise_exception=True)
+@permission_required("frontend.delete_street", raise_exception=True)
 def street_list(request):
     if request.method == 'GET':
         StreetList = Street.objects.all()
@@ -95,7 +97,7 @@ def street_list(request):
             return HttpResponseRedirect(reverse('wbsa:street_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.change_street", raise_exception=True)
 def street_edit(request, street_id):
     street = get_object_or_404(Street, id=street_id)
     if request.method == 'GET':
@@ -113,7 +115,7 @@ def street_edit(request, street_id):
         return HttpResponseRedirect(reverse('wbsa:street_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.add_street", raise_exception=True)
 def street_bulkadd(request):
     if request.method == 'GET':
         return render(request, 'street/street_bulk_add.html')
@@ -140,7 +142,8 @@ def street_bulkadd(request):
             return render(request, "error_page.html", context)
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.view_timeslot", raise_exception=True)
+@permission_required("frontend.delete_timeslot", raise_exception=True)
 def timeslot_list(request):
     if request.method == "GET":
         TimeslotList = Timeslot.objects.all()
@@ -153,7 +156,7 @@ def timeslot_list(request):
             return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.add_timeslot", raise_exception=True)
 def timeslot_new(request):
     if request.method == "GET":
         return render(request, "timeslot/timeslot_edit.html")
@@ -166,7 +169,7 @@ def timeslot_new(request):
         return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.change_timeslot", raise_exception=True)
 def timeslot_edit(request, timeslot_id):
     timeslot = get_object_or_404(Timeslot, id=timeslot_id)
     if request.method == "GET":
@@ -180,7 +183,7 @@ def timeslot_edit(request, timeslot_id):
         return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.add_appointment", raise_exception=True)
 def timeslot_suggestion(request):
     street = get_object_or_404(Street, name=request.GET['street'])
     TimeslotList = Timeslot.objects.all()
@@ -196,7 +199,8 @@ def timeslot_suggestion(request):
     return render(request, "timeslot/timeslot_suggestion.html", context)
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.view_appointment", raise_exception=True)
+@permission_required("frontend.delete_appointment", raise_exception=True)
 def appointment_list(request):
     if request.method == "GET":
         AppointmentList = Appointment.objects.all()
@@ -209,7 +213,7 @@ def appointment_list(request):
             return HttpResponseRedirect(reverse('wbsa:appointment_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.view_appointment", raise_exception=True)
 def appointment_view(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.GET['format'] == "modal":
@@ -217,7 +221,7 @@ def appointment_view(request, appointment_id):
         return render(request, 'appointment/appointment_modal.html', context)
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.change_appointment", raise_exception=True)
 def appointment_edit(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.method == 'GET':
@@ -237,7 +241,7 @@ def appointment_edit(request, appointment_id):
         return HttpResponseRedirect(reverse('wbsa:appointment_list'))
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.add_appointment", raise_exception=True)
 def appointment_new(request):
     if request.method == 'GET':
         StreetList = Street.objects.all()
@@ -270,7 +274,7 @@ def appointment_map(request):
     return render(request, 'appointment/map.html', context)
 
 
-@login_required(login_url='/auth/login')
+@permission_required("frontend.add_street", raise_exception=True)
 def street_osm_import(request):
     if request.method == "GET":
         plz = request.GET['plz']
