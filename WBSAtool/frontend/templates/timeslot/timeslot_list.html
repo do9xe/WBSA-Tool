@@ -5,7 +5,7 @@
 {% block data %}
 
 {% if timeslot_list %}
-<form class="my-md-3" method="post">
+<form class="my-md-3" action="{% url 'wbsa:timeslot_delete' %}" method="post">
 {% csrf_token %}
 <table class="table">
     <thead class="table-dark">

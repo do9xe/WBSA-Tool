@@ -5,7 +5,7 @@
 {% block data %}
 
 {% if appointment_list %}
-<form class="my-md-3" method="post">
+<form method="post" action="{% url 'wbsa:appointment_delete' %}" class="my-md-3">
 {% csrf_token %}
 <table class="table">
     <thead class="table-dark">

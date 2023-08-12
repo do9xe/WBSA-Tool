@@ -5,7 +5,7 @@
 {% block data %}
 
 {% if street_list %}
-<form method="post"  class="my-md-3">
+<form method="post" action="{% url 'wbsa:street_delete' %}" class="my-md-3">
     {% csrf_token %}
 <table class="table">
     <thead class="table-dark">
