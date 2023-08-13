@@ -21,6 +21,7 @@ urlpatterns = [
     path('timeslot/<int:timeslot_id>/edit', views.timeslot_edit, name='timeslot_edit'),
     path('timeslot/suggestion', views.timeslot_suggestion, name='timeslot_suggestion'),
     path('appointment/list', views.appointment_list, name='appointment_list'),
+    path('appointment/pdf', views.generate_pdf, name='appointment_pdf'),
     path('appointment/delete', views.appointment_delete, name='appointment_delete'),
     path('appointment/map', views.appointment_map, name='appointment_map'),
     path('appointment/new', views.appointment_new, name='appointment_new'),

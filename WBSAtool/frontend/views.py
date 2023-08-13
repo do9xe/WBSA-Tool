@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 import requests
 
 from .models import Area, Street, Timeslot, Appointment
+from .utils.ReportLabWrapper import ReportLab, wrap_text
 
 
 @permission_required("frontend.view_area", raise_exception=True)
@@ -309,3 +310,38 @@ def street_osm_import(request):
             new_street.osm_imported = True
             new_street.save()
         return HttpResponse(str(street_list))
+
+
+@permission_required("frontend.view_appointment", raise_exception=True)
+def generate_pdf(request):
+    vehicle_list = Area.objects.filter(is_parent=True)
+    timeslot_list = Timeslot.objects.all().order_by("date")
+
+    report = ReportLab("WBSA-Sammelliste", "Hendrik")
+    report.write_titel("Sammel-Liste der WBSA")
+    report.write_heading("Fahrzeuge:", 3)
+    for vehicle in vehicle_list.all():
+        report.write_bullet(vehicle.name)
+
+    report.write_heading("Zeitfenster:", 3)
+    for timeslot in timeslot_list.all():
+        report.write_bullet(f"{timeslot.date}, von {timeslot.time_from} bis {timeslot.time_to}")
+    report.new_page()
+
+    for vehicle in vehicle_list.all():
+        for timeslot in timeslot_list:
+            appointment_list = Appointment.objects.filter(timeslot=timeslot, street__area__parent=vehicle).order_by("street")
+            if appointment_list.count() == 0:
+                continue
+            report.write_heading(f"Fahzeug: {vehicle.name}", 2)
+            report.write_heading(f"Zeitfenster: {timeslot.date}, {timeslot.time_from}-{timeslot.time_to} Uhr", 3)
+
+            table_content = [["Name", "Adresse", "Bemerkung"]]
+            for x in appointment_list.all():
+                address = x.street.name + " " + x.house_number
+                table_content.append((wrap_text(x.contact_name), wrap_text(address), wrap_text(x.text)))
+            report.create_table(table_content)
+            report.new_page()
+
+    file = report.render()
+    return FileResponse(open(file, "rb"), as_attachment=False)
