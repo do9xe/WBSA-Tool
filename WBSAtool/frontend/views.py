@@ -8,14 +8,6 @@ from .models import Area, Street, Timeslot, Appointment
 from .utils.ReportLabWrapper import ReportLab, wrap_text
 
 
-@permission_required("frontend.view_area", raise_exception=True)
-def area_list(request):
-    if request.method == 'GET':
-        AreaList = Area.objects.all()
-        context = {'area_list': AreaList}
-        return render(request, 'area/area_list.html', context)
-
-
 @permission_required("frontend.delete_area", raise_exception=True)
 def area_delete(request):
     if request.method == 'POST':
@@ -87,14 +79,6 @@ def area_new(request):
         return HttpResponseRedirect(reverse('wbsa:area_list'))
 
 
-@permission_required("frontend.view_street", raise_exception=True)
-def street_list(request):
-    if request.method == 'GET':
-        StreetList = Street.objects.all()
-        context = {'street_list': StreetList}
-        return render(request, 'street/street_list.html', context)
-
-
 @permission_required("frontend.delete_street", raise_exception=True)
 def street_delete(request):
     if request.method == 'POST':
@@ -149,14 +133,6 @@ def street_bulkadd(request):
             return render(request, "error_page.html", context)
 
 
-@permission_required("frontend.view_timeslot", raise_exception=True)
-def timeslot_list(request):
-    if request.method == "GET":
-        TimeslotList = Timeslot.objects.all()
-        context = {'timeslot_list': TimeslotList}
-        return render(request, 'timeslot/timeslot_list.html', context)
-
-
 @permission_required("frontend.delete_timeslot", raise_exception=True)
 def timeslot_delete(request):
     if request.method == 'POST':
@@ -207,14 +183,6 @@ def timeslot_suggestion(request):
         return HttpResponse("")
     context = {"suggestion_list": SuggestionList}
     return render(request, "timeslot/timeslot_suggestion.html", context)
-
-
-@permission_required("frontend.view_appointment", raise_exception=True)
-def appointment_list(request):
-    if request.method == "GET":
-        AppointmentList = Appointment.objects.all()
-        context = {'appointment_list': AppointmentList}
-        return render(request, 'appointment/appointment_list.html', context)
 
 
 @permission_required("frontend.delete_appointment", raise_exception=True)
