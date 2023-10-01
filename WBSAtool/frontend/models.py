@@ -38,6 +38,7 @@ class Timeslot(models.Model):
 
 
 class Appointment(models.Model):
+    is_collected = models.BooleanField(default=False)
     contact_name = models.CharField(max_length=200)
     street = models.ForeignKey('Street',
                                on_delete=models.CASCADE,

@@ -46,7 +46,8 @@ class Command(BaseCommand):
          ]},
         {"name": "Fahrzeugführer",
          "permissions": [
-             "view_appointment"
+             "view_appointment",
+             "change_appointment"
          ]},
         {"name": "ReadOnly",
          "permissions": [

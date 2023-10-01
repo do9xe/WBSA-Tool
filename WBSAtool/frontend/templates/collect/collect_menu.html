@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block data %}
+<form method="post">
+{% csrf_token %}
+{{ form.non_field_errors }}
+<div class="my-2">
+    {{ form.area.errors }}
+    <label for="{{ form.area.id_for_labels }}" class="form-label">{{ form.area.label }}</label>
+    {{ form.area }}
+</div>
+
+<div class="my-2">
+    {{ form.timeslot.errors }}
+    <label for="{{ form.timeslot.id_for_labels }}" class="form-label">{{ form.timeslot.label }}</label>
+    {{ form.timeslot }}
+</div>
+
+<button type="submit" class="btn btn-success my-2">Abholungen anzeigen</button>
+</form>
+{% endblock data %}

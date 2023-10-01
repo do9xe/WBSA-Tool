@@ -4,7 +4,8 @@ from . import views, auth_views
 from .view_collection.area import AreaListView
 from .view_collection.street import StreetListView
 from .view_collection.timeslot import TimeslotListView
-from .view_collection.appointment import AppointmentListView
+from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected
+from .view_collection.collect import CollectMenu, CollectList
 
 app_name = 'wbsa'
 urlpatterns = [
@@ -31,6 +32,9 @@ urlpatterns = [
     path('appointment/new', views.appointment_new, name='appointment_new'),
     path('appointment/<int:appointment_id>', views.appointment_view, name='appointment_view'),
     path('appointment/<int:appointment_id>/edit', views.appointment_edit, name='appointment_edit'),
+    path('appointment/<int:appointment_id>/collected', UpdateAppointmentCollected.as_view()),
+    path('mobile/menu', CollectMenu.as_view(), name='collect_menu'),
+    path('mobile/list', CollectList.as_view(), name='collect_list'),
     path('auth/login', auth_views.login_user, name='login'),
     path('auth/logout', auth_views.logout_user, name='logout')
 ]

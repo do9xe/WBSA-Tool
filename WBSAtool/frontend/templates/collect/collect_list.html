@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block head %}
+    {{ block.super }}
+    <script>
+    async function showModal(source){
+        var myModal = new bootstrap.Modal(document.getElementById("appointment_detail"))
+        var modalBody = document.getElementById("appointment_detail").getElementsByClassName("modal-body")[0];
+        const response = await fetch("/appointment/"+ source.id +"?format=modal");
+        const appointment = await response.text();
+        modalBody.innerHTML = appointment;
+        var button = document.getElementById("MarkCollectedButton");
+        button.value = source.id;
+        myModal.show();
+    }
+    async function markCollected(button){
+        const csrftoken = document.getElementsByName('csrfmiddlewaretoken').item(0).value
+        var options = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                credentials: 'same-origin',
+                'X-CSRFToken': csrftoken
+            },
+            body: "is_collected=True"
+        }
+        const url = "/appointment/"+ button.value + "/collected";
+        await fetch(url, options);
+        document.getElementById(button.value).classList.remove("bg-warning");
+        document.getElementById(button.value).classList.add("bg-success");
+        document.getElementById("ModalCloseButton").click();
+    }
+    </script>
+{% endblock head %}
+{% block data %}
+    {% csrf_token %}
+    <table class="table">
+    {% for appointment in object_list %}
+        <tr>
+        <td class="{% if appointment.is_collected %}bg-success{% else %}bg-warning{% endif %}" onclick="showModal(this)" id="{{ appointment.id }}">
+            {{ appointment.contact_name }}<br>
+            {{ appointment.street.name }} {{ appointment.house_number }}
+        </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href="{% url "wbsa:collect_menu" %}" class="btn btn-primary my-3">Zurück zum Menü</a>
+<div class="modal" tabindex="-1" id="appointment_detail">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="ModalCloseButton">Close</button>
+            <button type="button" class="btn btn-primary" onclick="markCollected(this)" id="MarkCollectedButton">Baum Abgeholt</button>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock data %}
