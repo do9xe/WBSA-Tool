@@ -1,10 +1,29 @@
-<ul class="list-group w-100">
-<li class="list-group-item list-group-item-action">Name: {{appointment.contact_name}}</li>
-<li class="list-group-item list-group-item-action">
-    Adresse: <a href="http://www.google.com/maps/place/{{ appointment.lat }},{{ appointment.lon }}">{{appointment.street}} {{appointment.house_number}}</a>
-</li>
-<li class="list-group-item list-group-item-action">Telefon: {{appointment.phone}}</li>
-<li class="list-group-item list-group-item-action">EMail-Adresse: <a href="mailto:{{appointment.email}}">{{appointment.email}}</a></li>
-<li class="list-group-item list-group-item-action">Abholung: {{appointment.timeslot.date}}, Zwischen {{appointment.timeslot.time_from}} und {{appointment.timeslot.time_to}} Uhr</li>
-<li class="list-group-item list-group-item-action">Zusatz-Infos: {{appointment.text}}</li>
-</ul>
+<div class="modal-header">
+    <h5 class="modal-title">Details der Abholung</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <ul class="list-group w-100">
+        {% if appointment.is_collected %}
+            <li class="list-group-item list-group-item-action">Abgeholt: Ja</li>
+        {% else %}
+            <li class="list-group-item list-group-item-action">Abgeholt: Nein</li>
+        {% endif %}
+        <li class="list-group-item list-group-item-action">Name: {{appointment.contact_name}}</li>
+        <li class="list-group-item list-group-item-action">
+            Adresse: <a href="http://www.google.com/maps/place/{{ appointment.lat }},{{ appointment.lon }}">{{appointment.street}} {{appointment.house_number}}</a>
+        </li>
+        <li class="list-group-item list-group-item-action">Telefon: {{appointment.phone}}</li>
+        <li class="list-group-item list-group-item-action">EMail-Adresse: <a href="mailto:{{appointment.email}}">{{appointment.email}}</a></li>
+        <li class="list-group-item list-group-item-action">Abholung: {{appointment.timeslot.date}}, Zwischen {{appointment.timeslot.time_from}} und {{appointment.timeslot.time_to}} Uhr</li>
+        <li class="list-group-item list-group-item-action">Zusatz-Infos: {{appointment.text}}</li>
+    </ul>
+</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="ModalCloseButton">Cancel</button>
+        {% if appointment.is_collected %}
+            <button type="button" class="btn btn-warning" onclick="markCollected(this, {{ appointment.id }})" value="false" id="MarkCollectedButton">Abholung offen</button>
+        {% else %}
+            <button type="button" class="btn btn-primary" onclick="markCollected(this, {{ appointment.id }})" value="true" id="MarkCollectedButton">Baum abgeholt</button>
+        {% endif %}
+    </div>

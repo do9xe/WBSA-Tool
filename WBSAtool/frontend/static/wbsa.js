@@ -118,6 +118,52 @@ async function showAppointmentDetails(appointmentID) {
     myModal.show();
 }
 
+// eine Abholung als abgeholt markieren oder umgekehrt
+async function markCollected(button, appointment_id){
+    const csrftoken = document.getElementsByName('csrfmiddlewaretoken').item(0).value
+    var options = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            credentials: 'same-origin',
+            'X-CSRFToken': csrftoken
+        },
+        body: "is_collected=True"
+    }
+    if (button.value === "false") {
+        options.body = "is_collected=False";
+    }
+    const url = "/appointment/"+ appointment_id + "/collected";
+    await fetch(url, options);
+    document.getElementById("ModalCloseButton").click();
+    changeAppointmentPresentation(appointment_id, button.value);
+}
+
+// die Abholung nehmen und die Tabelle oder Liste anpassen
+function changeAppointmentPresentation(appointment_id, new_status) {
+    const type = document.getElementsByName("appointment_view_type")[0].id;
+    const container = "status_" + appointment_id;
+    const icon_collected = '<i class="bi bi-check-circle-fill text-success"></i>';
+    const icon_not_collected = '<i class="bi bi-x-circle-fill text-danger"></i>';
+    if (type === "collect") {
+        if (new_status === "true") {
+            document.getElementById(container).classList.remove("bg-warning");
+            document.getElementById(container).classList.add("bg-success");
+        } else {
+            document.getElementById(container).classList.remove("bg-success");
+            document.getElementById(container).classList.add("bg-warning");
+        }
+    }
+    if (type === "list") {
+        if (new_status === "true") {
+            document.getElementById(container).innerHTML = icon_collected;
+        } else {
+            document.getElementById(container).innerHTML = icon_not_collected;
+        }
+    }
+}
+
 // Einblenden eines Fensters mit den Details eines Gebietes
 async function showAreaDetails(areaID) {
     const modalContentDIV = document.getElementById("area_detail");
