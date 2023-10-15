@@ -35,6 +35,12 @@
                     <input class="form-control w-auto" type="time" id="time_to" name="time_to" value="{{ timeslot.time_to }}">
                 </div>
             </div>
+            <div class="row mb-3">
+                <label for="appointment_max" class="col-sm-3 col-form-label text-lg-end">Maximale Abholungen</label>
+                <div class="col">
+                    <input class="form-control w-auto" type="appointment_max" id="appointment_max" name="appointment_max" value="{{ timeslot.appointment_max }}">
+                </div>
+            </div>
         </div>
         <div class="text-end my-3">
                 <button type="submit" name="update" class="btn btn-primary">Speichern</button>

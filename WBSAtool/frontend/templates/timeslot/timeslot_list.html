@@ -14,6 +14,7 @@
             </th><th>Datum</th>
             <th>von</th>
             <th>bis</th>
+            <th>Auslastung</th>
             <th></th>
         </tr>
     </thead>
@@ -24,6 +25,15 @@
             <td>{{timeslot.date}}</td>
             <td>{{timeslot.time_from}}</td>
             <td>{{timeslot.time_to}}</td>
+            <td>
+                {% with timeslot.get_percentage as percentage %}
+                <div class="progress" role="progressbar" aria-valuenow="{{ timeslot.appointment_count }}" aria-valuemin="0" aria-valuemax="{{ timeslot.appointment_max }}">
+                    <div class="progress-bar progress-bar-striped overflow-visible {% if percentage >= 100 %}bg-danger{% elif percentage >= 70 %}bg-warning{% else %}bg-success{% endif %}" style="width: {{ percentage }}%">
+                    {{ timeslot.appointment_count }}/{{ timeslot.appointment_max }}
+                    </div>
+                </div>
+                {% endwith %}
+            </td>
             <td class="noprint text-end text-nowrap">
                 <a class="btn btn-sm btn-warning" href="{% url 'wbsa:timeslot_edit' timeslot.id %}" type="button">
                     <i class="bi bi-pencil-square"></i>

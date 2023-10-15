@@ -152,6 +152,7 @@ def timeslot_new(request):
         timeslot.date = request.POST['date']
         timeslot.time_from = request.POST['time_from']
         timeslot.time_to = request.POST['time_to']
+        timeslot.appointment_max = int(request.POST['appointment_max'])
         timeslot.save()
         return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
 
@@ -166,7 +167,9 @@ def timeslot_edit(request, timeslot_id):
         timeslot.date = request.POST['date']
         timeslot.time_from = request.POST['time_from']
         timeslot.time_to = request.POST['time_to']
+        timeslot.appointment_max = int(request.POST['appointment_max'])
         timeslot.save()
+        timeslot.update_count()
         return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
 
 
@@ -176,6 +179,8 @@ def timeslot_suggestion(request):
     TimeslotList = Timeslot.objects.all()
     SuggestionList = []
     for Slot in TimeslotList:
+        if Slot.is_full:
+            continue
         count = Appointment.objects.filter(timeslot=Slot, street=street).count()
         if count != 0:
             suggestion = {"timeslot": Slot, "count": count}
@@ -223,6 +228,8 @@ def appointment_edit(request, appointment_id):
         appointment.phone = request.POST['phone']
         appointment.email = request.POST['email']
         appointment.save()
+        for timeslot in Timeslot.objects.all():
+            timeslot.update_count()
         return HttpResponseRedirect(reverse('wbsa:appointment_list'))
 
 
@@ -249,6 +256,8 @@ def appointment_new(request):
         if email:
             newAppointment.email = email
         newAppointment.save()
+        for timeslot in Timeslot.objects.all():
+            timeslot.update_count()
         return HttpResponseRedirect(reverse('wbsa:appointment_map'))
 
 
