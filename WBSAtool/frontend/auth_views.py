@@ -15,10 +15,10 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse("wbsa:index"))
+                return HttpResponseRedirect(reverse("frontend:index"))
     return render(request, "registration/login.html")
 
 
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect(reverse("wbsa:index"))
+    return HttpResponseRedirect(reverse("frontend:index"))

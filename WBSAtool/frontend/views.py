@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core import serializers
 import requests
 
-from .models import Area, Street, Timeslot, Appointment
+from backend.models import Area, Street, Timeslot, Appointment
 from .utils.ReportLabWrapper import ReportLab, wrap_text
 
 
@@ -15,11 +15,11 @@ def area_delete(request):
         if request.POST['action'] == "delete_areas":
             for id in request.POST.getlist('select_row'):
                 Area.objects.get(id=int(id)).delete()
-            return HttpResponseRedirect(reverse('wbsa:area_list'))
+            return HttpResponseRedirect(reverse('"frontend:area_list'))
         elif request.POST['action']:
             id = int(request.POST['action'])
             Area.objects.get(id=id).delete()
-            return HttpResponseRedirect(reverse('wbsa:area_list'))
+            return HttpResponseRedirect(reverse('frontend:area_list'))
 
 
 @permission_required("frontend.view_area", raise_exception=True)
@@ -60,7 +60,7 @@ def area_edit(request, area_id):
         else:
             area.parent = None
         area.save()
-        return HttpResponseRedirect(reverse('wbsa:area_list'))
+        return HttpResponseRedirect(reverse('frontend:area_list'))
 
 
 @permission_required("frontend.add_area", raise_exception=True)
@@ -77,7 +77,7 @@ def area_new(request):
             selected_parent = get_object_or_404(Area, id=request.POST['parent'])
             newArea.parent = selected_parent
         newArea.save()
-        return HttpResponseRedirect(reverse('wbsa:area_list'))
+        return HttpResponseRedirect(reverse('frontend:area_list'))
 
 
 @permission_required("frontend.delete_street", raise_exception=True)
@@ -86,7 +86,7 @@ def street_delete(request):
         if request.POST['action'] == "delete":
             for id in request.POST.getlist('select_row'):
                 Street.objects.get(id=int(id)).delete()
-            return HttpResponseRedirect(reverse('wbsa:street_list'))
+            return HttpResponseRedirect(reverse('frontend:street_list'))
 
 
 @permission_required("frontend.change_street", raise_exception=True)
@@ -104,7 +104,7 @@ def street_edit(request, street_id):
         else:
             street.area = None
         street.save()
-        return HttpResponseRedirect(reverse('wbsa:street_list'))
+        return HttpResponseRedirect(reverse('frontend:street_list'))
 
 
 @permission_required("frontend.add_street", raise_exception=True)
@@ -127,7 +127,7 @@ def street_bulkadd(request):
                     except Area.DoesNotExist as e:
                         pass
                 newStreet.save()
-            return HttpResponseRedirect(reverse('wbsa:street_list'))
+            return HttpResponseRedirect(reverse('frontend:street_list'))
         else:
             error_message = f"Falscher CSV-Header: {header_raw}"
             context = {"error_message": error_message}
@@ -140,7 +140,7 @@ def timeslot_delete(request):
         if request.POST['action'] == "delete":
             for id in request.POST.getlist('select_row'):
                 Timeslot.objects.get(id=int(id)).delete()
-            return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
+            return HttpResponseRedirect(reverse('frontend:timeslot_list'))
 
 
 @permission_required("frontend.add_timeslot", raise_exception=True)
@@ -154,7 +154,7 @@ def timeslot_new(request):
         timeslot.time_to = request.POST['time_to']
         timeslot.appointment_max = int(request.POST['appointment_max'])
         timeslot.save()
-        return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
+        return HttpResponseRedirect(reverse('frontend:timeslot_list'))
 
 
 @permission_required("frontend.change_timeslot", raise_exception=True)
@@ -170,7 +170,7 @@ def timeslot_edit(request, timeslot_id):
         timeslot.appointment_max = int(request.POST['appointment_max'])
         timeslot.save()
         timeslot.update_count()
-        return HttpResponseRedirect(reverse('wbsa:timeslot_list'))
+        return HttpResponseRedirect(reverse('frontend:timeslot_list'))
 
 
 @permission_required("frontend.add_appointment", raise_exception=True)
@@ -197,7 +197,7 @@ def appointment_delete(request):
         if request.POST['action'] == "delete":
             for id in request.POST.getlist('select_row'):
                 Appointment.objects.get(id=int(id)).delete()
-            return HttpResponseRedirect(reverse('wbsa:appointment_list'))
+            return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
 
 @permission_required("frontend.view_appointment", raise_exception=True)
@@ -230,7 +230,7 @@ def appointment_edit(request, appointment_id):
         appointment.save()
         for timeslot in Timeslot.objects.all():
             timeslot.update_count()
-        return HttpResponseRedirect(reverse('wbsa:appointment_list'))
+        return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
 
 @permission_required("frontend.add_appointment", raise_exception=True)
@@ -258,7 +258,7 @@ def appointment_new(request):
         newAppointment.save()
         for timeslot in Timeslot.objects.all():
             timeslot.update_count()
-        return HttpResponseRedirect(reverse('wbsa:appointment_map'))
+        return HttpResponseRedirect(reverse('frontend:appointment_map'))
 
 
 @login_required(login_url='/auth/login')

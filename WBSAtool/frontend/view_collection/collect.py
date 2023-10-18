@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
 from django.utils.html import urlencode
 from ..forms import CollectMenuForm
-from ..models import Appointment
+from backend.models import Appointment
 
 
 class CollectMenu(FormView):
@@ -13,7 +13,7 @@ class CollectMenu(FormView):
     success_url = ""
 
     def form_valid(self, form):
-        url = reverse("wbsa:collect_list")
+        url = reverse("frontend:collect_list")
         parameters = urlencode({"area": form.cleaned_data['area'].id, "timeslot": form.cleaned_data['timeslot'].id})
         self.success_url = f"{url}?{parameters}"
         return super().form_valid(form)

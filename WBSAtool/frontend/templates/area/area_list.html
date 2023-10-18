@@ -7,7 +7,7 @@
 {% if area_list %}
 <div class="row justify-content-center">
     <div class="col-md-3">
-        <form method="post" action="{% url 'wbsa:area_delete' %}" class="my-md-3">
+        <form method="post" action="{% url 'frontend:area_delete' %}" class="my-md-3">
         {% csrf_token %}
         <h4>Fahrzeuge</h4>
         <table class="table">
@@ -26,7 +26,7 @@
                         <a class="btn btn-sm btn-success" type="button" onclick="showAreaDetails({{area.id}})">
                             <i class="bi bi-info-circle"></i>
                         </a>
-                        <a class="btn btn-sm btn-warning" href="{% url 'wbsa:area_edit' area.id %}" type="button">
+                        <a class="btn btn-sm btn-warning" href="{% url 'frontend:area_edit' area.id %}" type="button">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         <button type="submit" name="action" value="{{area.id}}" class="btn btn-danger btn-sm">
@@ -66,7 +66,7 @@
                         <a class="btn btn-sm btn-success" type="button" onclick="showAreaDetails({{area.id}})">
                             <i class="bi bi-info-circle"></i>
                         </a>
-                        <a class="btn btn-sm btn-warning" href="{% url 'wbsa:area_edit' area.id %}" type="button">
+                        <a class="btn btn-sm btn-warning" href="{% url 'frontend:area_edit' area.id %}" type="button">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         <button type="submit" name="action" value="{{area.id}}" class="btn btn-danger btn-sm">
@@ -78,7 +78,7 @@
             {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'wbsa:area_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neues Gebiet</a>
+        <a href="{% url 'frontend:area_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neues Gebiet</a>
         <button type="submit" name="action" value="delete_areas" class="btn btn-danger btn-sm">
             <i class="bi bi-trash3"></i> Delete Selected
         </button>
@@ -102,7 +102,8 @@
     </div>
 </div>
 {% else %}
-<li>Keine Gebiete oder Fahrzeuge angelegt!</li>
+Keine Gebiete oder Fahrzeuge angelegt!<br>
+    <a href="{% url 'frontend:area_new' %}" class="btn btn-primary my-3">Neues Gebiet oder Fahrzeug anlegen</a>
 </ul>
 {% endif %}
 {% endblock data %}

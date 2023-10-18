@@ -1,5 +1,5 @@
 from .generic import WBSAListView
-from ..models import Area
+from backend.models import Area
 
 
 class AreaListView(WBSAListView):

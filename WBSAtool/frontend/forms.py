@@ -1,5 +1,5 @@
 from django import forms
-from .models import Area, Timeslot
+from backend.models import Area, Timeslot
 from django.forms.models import ModelChoiceField
 
 

@@ -4,9 +4,9 @@
 
 {% block data %}
 {% if street.id %}
-    <form action="{% url 'wbsa:street_edit' street.id %}" method="post" class="form-object-edit mt-5">
+    <form action="{% url 'frontend:street_edit' street.id %}" method="post" class="form-object-edit mt-5">
 {% else %}
-    <form action="{% url 'wbsa:street_new' %}" method="post" class="form-object-edit mt-5">
+    <form action="{% url 'frontend:street_new' %}" method="post" class="form-object-edit mt-5">
 {% endif %}
     {% csrf_token %}
         <div class="field-group my-5">
@@ -30,7 +30,7 @@
         </div>
         <div class="text-end my-3">
                 <button type="submit" name="update" class="btn btn-primary">Speichern</button>
-                <a class="btn btn-outline-danger" href="{% url 'wbsa:street_list' %}">Abbrechen</a>
+                <a class="btn btn-outline-danger" href="{% url 'frontend:street_list' %}">Abbrechen</a>
         </div>
     </form>
 

@@ -1,5 +1,5 @@
 from .generic import WBSAListView
-from ..models import Timeslot
+from backend.models import Timeslot
 
 
 class TimeslotListView(WBSAListView):

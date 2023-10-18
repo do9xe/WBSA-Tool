@@ -1,5 +1,5 @@
 from .generic import WBSAListView
-from ..models import Street
+from backend.models import Street
 
 
 class StreetListView(WBSAListView):

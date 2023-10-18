@@ -52,11 +52,11 @@
 
 {% for area in area_list %}
     {% if area.is_parent %}
-<h2><a href="{% url 'wbsa:area_view' area.id %}">{{area.name}}</a> <a href="{% url 'wbsa:area_edit' area.id %}">[edit]</a></h2>
+<h2><a href="{% url 'frontend:area_view' area.id %}">{{area.name}}</a> <a href="{% url 'frontend:area_edit' area.id %}">[edit]</a></h2>
         <ul>
         {% for subarea in area_list %}
             {% if subarea.parent == area %}
-                <li><a href="{% url 'wbsa:area_view' subarea.id %}">{{subarea.name}}</a> <a href="{% url 'wbsa:area_edit' subarea.id %}">[edit]</a></li>
+                <li><a href="{% url 'frontend:area_view' subarea.id %}">{{subarea.name}}</a> <a href="{% url 'frontend:area_edit' subarea.id %}">[edit]</a></li>
             {% endif %}
         {% endfor %}
         </ul>

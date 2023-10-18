@@ -7,7 +7,7 @@ from .view_collection.timeslot import TimeslotListView
 from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected
 from .view_collection.collect import CollectMenu, CollectList
 
-app_name = 'wbsa'
+app_name = 'frontend'
 urlpatterns = [
     path('', RedirectView.as_view(url='appointment/map'), name='index'),
     path('area/list', AreaListView.as_view(), name='area_list'),

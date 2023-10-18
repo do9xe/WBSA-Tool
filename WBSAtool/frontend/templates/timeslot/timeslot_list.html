@@ -5,7 +5,7 @@
 {% block data %}
 
 {% if timeslot_list %}
-<form class="my-md-3" action="{% url 'wbsa:timeslot_delete' %}" method="post">
+<form class="my-md-3" action="{% url 'frontend:timeslot_delete' %}" method="post">
 {% csrf_token %}
 <table class="table">
     <thead class="table-dark">
@@ -35,7 +35,7 @@
                 {% endwith %}
             </td>
             <td class="noprint text-end text-nowrap">
-                <a class="btn btn-sm btn-warning" href="{% url 'wbsa:timeslot_edit' timeslot.id %}" type="button">
+                <a class="btn btn-sm btn-warning" href="{% url 'frontend:timeslot_edit' timeslot.id %}" type="button">
                     <i class="bi bi-pencil-square"></i>
                 </a>
             </td>
@@ -43,7 +43,7 @@
     {% endfor %}
     </tbody>
 </table>
-    <a href="{% url 'wbsa:timeslot_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neuer Abholungszeitraum</a>
+    <a href="{% url 'frontend:timeslot_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neuer Abholungszeitraum</a>
     <a href="#deleteConfirm" class="btn btn-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i> Ausgewählte Löschen</a>
 
 
@@ -67,6 +67,7 @@
 </div>
 </form>
 {% else %}
-Keine Abholungszeiträume angelegt!
+Keine Abholungszeiträume angelegt!<br>
+<a href="{% url 'frontend:timeslot_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neuer Abholungszeitraum</a>
 {% endif %}
 {% endblock data %}

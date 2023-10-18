@@ -4,9 +4,9 @@
 
 {% block data %}
 {% if appointment.id %}
-    <form autocomplete="off" action="{% url 'wbsa:appointment_edit' appointment.id %}" method="post" class="form-object-edit mt-5">
+    <form autocomplete="off" action="{% url 'frontend:appointment_edit' appointment.id %}" method="post" class="form-object-edit mt-5">
 {% else %}
-    <form autocomplete="off" action="{% url 'wbsa:appointment_new' %}" method="post" class="form-object-edit mt-5">
+    <form autocomplete="off" action="{% url 'frontend:appointment_new' %}" method="post" class="form-object-edit mt-5">
 {% endif %}
     {% csrf_token %}
         <div class="field-group my-5">
@@ -76,9 +76,9 @@
             <div class="text-end my-3">
                     <button type="submit" name="update" class="btn btn-primary">Speichern</button>
                     {% if appointment %}
-                        <a class="btn btn-outline-danger" href="{% url 'wbsa:appointment_list' %}">Abbrechen</a>
+                        <a class="btn btn-outline-danger" href="{% url 'frontend:appointment_list' %}">Abbrechen</a>
                     {% else %}
-                        <a class="btn btn-outline-danger" href="{% url 'wbsa:appointment_new' %}">Reset</a>
+                        <a class="btn btn-outline-danger" href="{% url 'frontend:appointment_new' %}">Reset</a>
                     {% endif %}
             </div>
         </div>

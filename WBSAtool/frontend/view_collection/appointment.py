@@ -1,6 +1,6 @@
 from django.views.generic.edit import UpdateView
 from .generic import WBSAListView
-from ..models import Appointment
+from backend.models import Appointment
 
 
 class AppointmentListView(WBSAListView):

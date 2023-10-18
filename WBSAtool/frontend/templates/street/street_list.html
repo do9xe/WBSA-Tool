@@ -5,7 +5,7 @@
 {% block data %}
 
 {% if street_list %}
-<form method="post" action="{% url 'wbsa:street_delete' %}" class="my-md-3">
+<form method="post" action="{% url 'frontend:street_delete' %}" class="my-md-3">
     {% csrf_token %}
 <table class="table">
     <thead class="table-dark">
@@ -25,7 +25,7 @@
             <td>{{street.area}}</td>
             <td>{{street.area.parent}}</td>
             <td class="noprint text-end text-nowrap">
-                <a class="btn btn-sm btn-warning" href="{% url 'wbsa:street_edit' street.id %}" type="button">
+                <a class="btn btn-sm btn-warning" href="{% url 'frontend:street_edit' street.id %}" type="button">
                     <i class="bi bi-pencil-square"></i>
                 </a>
             </td>
@@ -34,7 +34,7 @@
     </tbody>
 </table>
     <a href="#deleteConfirm" class="btn btn-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i> Ausgewählte Löschen</a>
-    <a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
+    <a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'frontend:street_bulkadd' %}">
         <i class="bi bi-stack"></i> Massenimport
     </a>
 <div id="deleteConfirm" class="modal fade">
@@ -58,7 +58,7 @@
 </form>
 {% else %}
 Keine Straßen angelegt!<br>
-<a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'wbsa:street_bulkadd' %}">
+<a class="btn btn-primary btn-sm" href="{% url 'frontend:street_bulkadd' %}">
         <i class="bi bi-stack"></i> Massenimport
 </a>
 {% endif %}
