@@ -14,53 +14,8 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
 
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-<script>
-    // Creating map options
-    var mapOptions = {
-        center: [48.99707935, 8.47255828438081],
-        zoom: 15
-    }
-    // Creating a map object
-    var map = new L.map('map', mapOptions);
-    // Creating a Layer object
-    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-    // Adding layer to the map
-    map.addLayer(layer);
-
-    let locations = [
-{% for appointment in appointment_list %}
-        {
-            "id": {{appointment.id}},
-            "lat": {{appointment.lat}},
-            "long": {{appointment.lon}},
-            "title": "{{appointment.contact_name}}",
-            "address": "{{appointment.street}} {{appointment.house_number}}",
-            "date": "{{appointment.timeslot.date}}"
-        },
-{% endfor %}
-    ]
-
-    let popupOption = {
-        "closeButton":false
-    }
-
-    var markers = new L.markerClusterGroup();
-    var bounds = [];
-
-    locations.forEach(element => {
-        bounds.push([element.lat,element.long])
-        var marker = new L.Marker([element.lat,element.long])
-        .on("mouseover",event =>{
-            event.target.bindPopup('<div>'+element.title+'<br>'+element.address+'<br>Abholdatum:'+element.date+'</div>',popupOption).openPopup();
-        })
-        .on("mouseout", event => {
-            event.target.closePopup();
-        })
-        markers.addLayer(marker);
-    });
-    map.addLayer(markers);
-    map.fitBounds(new L.LatLngBounds(bounds));
-</script>
+{% load static %}
+<script src="{% static 'wbsa_map.js' %}"></script>
 {% endblock jsfooter%}
 
 {% block data %}
