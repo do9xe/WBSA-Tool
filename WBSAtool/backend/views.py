@@ -7,7 +7,7 @@ from backend.serializers import AreaSerializer, StreetSerializer, TimeslotSerial
 class AreaList(generics.ListCreateAPIView):
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
-    filterset_fields = ['id', 'name', 'ist_parent']
+    filterset_fields = ['id', 'name', 'is_parent']
 
 
 class AreaDetail(generics.RetrieveUpdateDestroyAPIView):
