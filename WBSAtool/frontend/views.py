@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required, permission_required
-from django.core import serializers
+from django.contrib.auth.decorators import permission_required
 import requests
 
 from backend.models import Area, Street, Timeslot, Appointment
@@ -206,9 +205,6 @@ def appointment_view(request, appointment_id):
     if request.GET['format'] == "modal":
         context = {'appointment': appointment}
         return render(request, 'appointment/appointment_modal.html', context)
-    if request.GET['format'] == "json":
-        data = serializers.serialize("json", [appointment])
-        return HttpResponse(data, content_type='application/json')
 
 
 @permission_required("frontend.change_appointment", raise_exception=True)
