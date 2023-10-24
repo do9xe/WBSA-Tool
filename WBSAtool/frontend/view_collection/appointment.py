@@ -18,6 +18,5 @@ class UpdateAppointmentCollected(UpdateView):
     success_url = "/mobile/menu"
 
 
-class AppointmentMapView(TemplateView, LoginRequiredMixin):
+class AppointmentMapView(LoginRequiredMixin, TemplateView):
     template_name = "appointment/map.html"
-

@@ -261,13 +261,6 @@ def appointment_new(request):
         return HttpResponseRedirect(reverse('frontend:appointment_map'))
 
 
-@login_required(login_url='/auth/login')
-def appointment_map(request):
-    AppointmentList = Appointment.objects.all()
-    context = {'appointment_list': AppointmentList}
-    return render(request, 'appointment/map.html', context)
-
-
 @permission_required("frontend.add_street", raise_exception=True)
 def street_osm_import(request):
     if request.method == "GET":
