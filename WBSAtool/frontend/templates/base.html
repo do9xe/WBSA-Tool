@@ -29,7 +29,15 @@
                 {% if perms.frontend.view_timeslot %}<a href="{% url 'frontend:timeslot_list' %}" class="nav-item nav-link px-3"><i class="bi bi-calendar-week"></i> Zeitslots</a>{% endif %}
                 {% if perms.frontend.view_appointment %}<a href="{% url 'frontend:appointment_list' %}" class="nav-item nav-link px-3"><i class="bi bi-houses"></i> Abholungen</a>{% endif %}
                 {% if perms.frontend.change_appointment %}<a href="{% url 'frontend:collect_menu' %}" class="nav-item nav-link px-3"><i class="bi bi-truck"></i> Fahrzeug</a>{% endif %}
-                <a href="{% url 'frontend:appointment_map' %}" class="nav-item nav-link px-3"><i class="bi bi-geo-alt"></i> Karte</a>
+                <li class="nav-item dropdown px-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-info-circle"></i> Infos
+                    </a>
+                    <ul class="dropdown-menu">
+                        <a href="{% url 'frontend:appointment_map' %}" class="dropdown-item"><i class="bi bi-pin-map"></i> Karte</a>
+                        <a href="{% url 'frontend:appointment_stats' %}" class="dropdown-item"><i class="bi bi-graph-up"></i> Statistik</a>
+                    </ul>
+                </li>
             </div>
             <div class="navbar-nav ms-auto">
                 {% if perms.frontend.add_appointment %}<a href="{% url 'frontend:appointment_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neue Abholung</a>{% endif %}

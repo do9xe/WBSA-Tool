@@ -4,7 +4,7 @@ from . import views, auth_views
 from .view_collection.area import AreaListView
 from .view_collection.street import StreetListView
 from .view_collection.timeslot import TimeslotListView
-from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected, AppointmentMapView
+from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected, AppointmentMapView, AppointmentStatsView
 from .view_collection.collect import CollectMenu, CollectList
 
 app_name = 'frontend'
@@ -29,6 +29,7 @@ urlpatterns = [
     path('appointment/pdf', views.generate_pdf, name='appointment_pdf'),
     path('appointment/delete', views.appointment_delete, name='appointment_delete'),
     path('appointment/map', AppointmentMapView.as_view(), name='appointment_map'),
+    path('appointment/stats', AppointmentStatsView.as_view(), name='appointment_stats'),
     path('appointment/new', views.appointment_new, name='appointment_new'),
     path('appointment/<int:appointment_id>', views.appointment_view, name='appointment_view'),
     path('appointment/<int:appointment_id>/edit', views.appointment_edit, name='appointment_edit'),

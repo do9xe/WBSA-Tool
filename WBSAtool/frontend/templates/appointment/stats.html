@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{% endblock head %}
+
+{% block jsfooter %}
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      async function drawChart() {
+        const collectedColor = "#00a112";
+        const notCollectedColor = "#d90000";
+        var tsData = await (await fetch("/api/timeslot")).json();
+        var areaData = await (await fetch("/api/area?is_parent=False")).json();
+        var parentAreaData = await (await fetch("/api/area?is_parent=True")).json();
+        var appointmentData = await (await fetch("/api/appointment")).json();
+
+        //Code für das Zeitslot Tortendiagramm
+        var timeslotArray = [['Zeitraum', 'Abholungen']];
+
+        tsData.forEach(timeslot => {
+          const name = timeslot.date + ", " + timeslot.time_from + " bis " + timeslot.time_to;
+          timeslotArray.push([name, timeslot.appointment_count]);
+        });
+
+        var data = google.visualization.arrayToDataTable(timeslotArray);
+        var options = {
+          title: 'Abholungen pro Zeitraum',
+          legend: { position: "top", }
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('timeslot_piechart'));
+        chart.draw(data, options);
+
+        // Abholungen pro Gebiet inklusive Status
+        var options = {
+            title: 'Abholungen pro Gebiet',
+            legend: { position: "none" },
+            bar: { groupWidth: '75%' },
+            isStacked: true
+        };
+        var collectStatusByArea = [["Gebiet", "Abgeholt", { role: 'style' }, "Nicht abgeholt", { role: 'style' }]];
+
+        //vorfiltern, falls eine Straße kein Gebiet hat
+        var clearedAppointmentData = appointmentData.filter(appointment => appointment.street.area != null);
+        areaData.forEach(area => {
+            var collectedCount = clearedAppointmentData.filter(appointment => (appointment.street.area.id === area.id && appointment.is_collected === true)).length;
+            var notCollectedCount = clearedAppointmentData.filter(appointment => (appointment.street.area.id === area.id && appointment.is_collected === false)).length;
+            collectStatusByArea.push([area.name, collectedCount, collectedColor, notCollectedCount, notCollectedColor]);
+        });
+
+        var data = google.visualization.arrayToDataTable(collectStatusByArea);
+        var chart = new google.visualization.ColumnChart(document.getElementById("collected_bargraph"))
+        chart.draw(data, options);
+
+        //Fortschritte der Fahrzeuge
+        var options = {
+            title: "Fortschritt der Fahrzeuge",
+            legend: {position: "none"},
+            isStacked: 'percent'
+        };
+        var collectStatusByParent = [["Fahrzeug", "Abgeholt", { role: 'style' }, "Nicht abgeholt", { role: 'style' }]];
+        var clearedAppointmentData = appointmentData.filter(appointment => appointment.street.area != null);
+        clearedAppointmentData = clearedAppointmentData.filter(appointment => appointment.street.area.parent != null);
+
+        parentAreaData.forEach(area =>{
+            var collectedCount = clearedAppointmentData.filter(appointment => (appointment.street.area.parent === area.id && appointment.is_collected === true)).length;
+            var notCollectedCount = clearedAppointmentData.filter(appointment => (appointment.street.area.parent === area.id && appointment.is_collected === false)).length;
+            collectStatusByParent.push([area.name, collectedCount, collectedColor, notCollectedCount, notCollectedColor]);
+        });
+        var data = google.visualization.arrayToDataTable(collectStatusByParent);
+        var chart = new google.visualization.BarChart(document.getElementById("collectProgress"))
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock jsfooter %}
+
+{% block data %}
+    <div class="container">
+    <div class="row">
+        <div class="col">
+            <div id="timeslot_piechart" style="height: 400px;"></div>
+        </div>
+        <div class="col">
+            <div id="collected_bargraph" style="height: 400px;"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="collectProgress" style="height: 300px;"></div>
+        </div>
+    </div>
+    </div>
+{% endblock data %}

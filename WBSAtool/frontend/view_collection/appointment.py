@@ -20,3 +20,7 @@ class UpdateAppointmentCollected(UpdateView):
 
 class AppointmentMapView(LoginRequiredMixin, TemplateView):
     template_name = "appointment/map.html"
+
+
+class AppointmentStatsView(LoginRequiredMixin, TemplateView):
+    template_name = "appointment/stats.html"
