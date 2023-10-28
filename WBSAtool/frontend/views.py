@@ -88,24 +88,6 @@ def street_delete(request):
             return HttpResponseRedirect(reverse('frontend:street_list'))
 
 
-@permission_required("frontend.change_street", raise_exception=True)
-def street_edit(request, street_id):
-    street = get_object_or_404(Street, id=street_id)
-    if request.method == 'GET':
-        AreaList = Area.objects.filter(is_parent=False)
-        context = {'street': street, 'area_list': AreaList}
-        return render(request, 'street/street_edit.html', context)
-    if request.method == 'POST':
-        street.name = request.POST['name']
-        if request.POST['area'] != "None":
-            selected_parent = get_object_or_404(Area, id=request.POST['area'])
-            street.area = selected_parent
-        else:
-            street.area = None
-        street.save()
-        return HttpResponseRedirect(reverse('frontend:street_list'))
-
-
 @permission_required("frontend.add_street", raise_exception=True)
 def street_bulkadd(request):
     if request.method == 'GET':

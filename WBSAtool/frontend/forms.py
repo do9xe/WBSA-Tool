@@ -1,5 +1,5 @@
 from django import forms
-from backend.models import Area, Timeslot
+from backend.models import Area, Street, Timeslot
 from django.forms.models import ModelChoiceField
 
 
@@ -16,3 +16,14 @@ class CollectMenuForm(forms.Form):
                                    label="Zeitraum",
                                    widget=forms.Select(attrs={'class': 'form-select'}))
 
+
+class StreetForm(forms.ModelForm):
+    class Meta:
+        model = Street
+        exclude = ["osm_imported"]
+    name = forms.CharField(label="Straßenname",
+                           max_length=200,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    area = forms.ModelChoiceField(label="Gebiet",
+                                  queryset=Area.objects.filter(is_parent=False),
+                                  widget=forms.Select(attrs={'class': 'form-select'}))
