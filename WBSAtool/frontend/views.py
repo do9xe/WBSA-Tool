@@ -14,7 +14,7 @@ def area_delete(request):
         if request.POST['action'] == "delete_areas":
             for id in request.POST.getlist('select_row'):
                 Area.objects.get(id=int(id)).delete()
-            return HttpResponseRedirect(reverse('"frontend:area_list'))
+            return HttpResponseRedirect(reverse('frontend:area_list'))
         elif request.POST['action']:
             id = int(request.POST['action'])
             Area.objects.get(id=id).delete()
