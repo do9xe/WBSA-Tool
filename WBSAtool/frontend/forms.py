@@ -27,3 +27,12 @@ class StreetForm(forms.ModelForm):
     area = forms.ModelChoiceField(label="Gebiet",
                                   queryset=Area.objects.filter(is_parent=False),
                                   widget=forms.Select(attrs={'class': 'form-select'}))
+
+
+class BulkUpdateStreetForm(forms.Form):
+    area = forms.ModelChoiceField(label="Gebiet",
+                                  queryset=Area.objects.filter(is_parent=False),
+                                  widget=forms.Select(attrs={'class': 'form-select'}))
+    select_row = forms.ModelMultipleChoiceField(queryset=Street.objects.all(),
+                                                widget=forms.MultipleHiddenInput,
+                                                )

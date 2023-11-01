@@ -1,6 +1,6 @@
-from .generic import WBSAListView, WBSACreateView, WBSAUpdateView
+from .generic import WBSAListView, WBSACreateView, WBSAUpdateView, WBSABulkUpdateView
 from backend.models import Street
-from frontend.forms import StreetForm
+from frontend.forms import StreetForm, BulkUpdateStreetForm
 
 
 class StreetListView(WBSAListView):
@@ -20,4 +20,11 @@ class UpdateStreetView(WBSAUpdateView):
     model = Street
     form_class = StreetForm
     template_name = "street/street_edit.html"
+    redirect_to = "frontend:street_list"
+
+
+class BulkUpdateStreetView(WBSABulkUpdateView):
+    model = Street
+    form_class = BulkUpdateStreetForm
+    template_name = "bulk_edit.html"
     redirect_to = "frontend:street_list"

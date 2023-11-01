@@ -33,11 +33,21 @@
     {% endfor %}
     </tbody>
 </table>
+
+    <div class="btn-group">
+        <a href="{% url 'frontend:street_new' %}" class="btn btn-success btn-sm"><i class="bi     bi-plus-circle"  ></i> Neue Straße</a>
+        <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split"    data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="{% url 'frontend:street_bulkadd' %}">
+              <i class="bi bi-stack"></i> Massenimport</a>
+          </li>
+        </ul>
+    </div>
+    <button class="btn btn-warning btn-sm" formaction="{% url 'frontend:street_bulk_edit' %}" type="submit" name="_edit">Ausgewählte bearbeiten</button>
     <a href="#deleteConfirm" class="btn btn-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i> Ausgewählte Löschen</a>
-    <a name="bulkadd" class="btn btn-primary btn-sm" href="{% url 'frontend:street_bulkadd' %}">
-        <i class="bi bi-stack"></i> Massenimport
-    </a>
-    <a href="{% url "frontend:street_new" %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Neue Straße</a>
+
 <div id="deleteConfirm" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">

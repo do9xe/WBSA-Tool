@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block titel %}Bulk-Edit{% endblock titel %}
+
+{% block data %}
+    <form method="post" class="form-object-edit mt-5">
+    {% csrf_token %}
+    {% for object in form.initial.id_list %}
+        <input type="hidden" name="select_row" value="{{ object }}">
+    {% endfor %}
+        <div class="field-group my-5">
+        {% for field in form %}
+            {% if not field.is_hidden %}
+	        <div class="row mb-3">
+                {{ field.errors }}
+                <label for="name" class="col-sm-3 col-form-label text-lg-end">{{ field.label }}</label>
+                <div class="col">
+                    {{ field }}
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <div class="text-end my-3">
+                <button type="submit" name="_save" class="btn btn-primary">Speichern</button>
+                <a class="btn btn-outline-danger" href="{% url redirect_to %}">Abbrechen</a>
+        </div>
+    </form>
+
+{% endblock data %}
