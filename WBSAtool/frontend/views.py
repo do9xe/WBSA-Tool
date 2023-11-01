@@ -40,45 +40,6 @@ def area_view(request, area_id):
         return HttpResponse("Error, only intended von indirect use")
 
 
-@permission_required("frontend.change_area", raise_exception=True)
-def area_edit(request, area_id):
-    area = get_object_or_404(Area, id=area_id)
-    if request.method == 'GET':
-        AreaList = Area.objects.filter(is_parent=True)
-        context = {'area': area, 'parent_area_list': AreaList}
-        return render(request, 'area/area_edit.html', context)
-    if request.method == 'POST':
-        area.name = request.POST['name']
-        if 'is_parent' in request.POST:
-            area.is_parent = True
-        else:
-            area.is_parent = False
-        if request.POST['parent'] != "None":
-            selected_parent = get_object_or_404(Area, id=request.POST['parent'])
-            area.parent = selected_parent
-        else:
-            area.parent = None
-        area.save()
-        return HttpResponseRedirect(reverse('frontend:area_list'))
-
-
-@permission_required("frontend.add_area", raise_exception=True)
-def area_new(request):
-    if request.method == 'GET':
-        AreaList = Area.objects.filter(is_parent=True)
-        context = {'parent_area_list': AreaList}
-        return render(request, 'area/area_edit.html', context)
-    if request.method == 'POST':
-        newArea = Area(name=request.POST['name'])
-        if 'is_parent' in request.POST:
-            newArea.is_parent = True
-        if request.POST['parent'] != "None":
-            selected_parent = get_object_or_404(Area, id=request.POST['parent'])
-            newArea.parent = selected_parent
-        newArea.save()
-        return HttpResponseRedirect(reverse('frontend:area_list'))
-
-
 @permission_required("frontend.delete_street", raise_exception=True)
 def street_delete(request):
     if request.method == 'POST':

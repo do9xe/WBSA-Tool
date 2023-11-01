@@ -34,5 +34,20 @@ class BulkUpdateStreetForm(forms.Form):
                                   queryset=Area.objects.filter(is_parent=False),
                                   widget=forms.Select(attrs={'class': 'form-select'}))
     select_row = forms.ModelMultipleChoiceField(queryset=Street.objects.all(),
-                                                widget=forms.MultipleHiddenInput,
-                                                )
+                                                widget=forms.MultipleHiddenInput)
+
+
+class AreaForm(forms.ModelForm):
+    class Meta:
+        model = Area
+        exclude = []
+    name = forms.CharField(label="Name",
+                           max_length=200,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    is_parent = forms.BooleanField(label="Ist ein Fahrzeug",
+                                   required=False,
+                                   widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    parent = forms.ModelChoiceField(label="Fahrzeug",
+                                    required=False,
+                                    queryset=Area.objects.filter(is_parent=True),
+                                    widget=forms.Select(attrs={'class': 'form-select'}))

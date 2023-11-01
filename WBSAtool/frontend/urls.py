@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
 from . import views, auth_views
-from .view_collection.area import AreaListView
+from .view_collection.area import AreaListView, AreaCreateView, AreaUpdateView
 from .view_collection.street import StreetListView, NewStreetView, UpdateStreetView, BulkUpdateStreetView
 from .view_collection.timeslot import TimeslotListView
 from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected, AppointmentMapView, AppointmentStatsView
@@ -11,11 +11,11 @@ app_name = 'frontend'
 urlpatterns = [
     path('', RedirectView.as_view(url='appointment/map'), name='index'),
     path('area/list', AreaListView.as_view(), name='area_list'),
-    path('area/new', views.area_new, name='area_new'),
+    path('area/new', AreaCreateView.as_view(), name='area_new'),
     path('area/delete', views.area_delete, name='area_delete'),
     path('area/<int:area_id>', views.area_view, name='area_view'),
-    path('area/<int:area_id>/edit', views.area_edit, name='area_edit'),
-    path('street/list', StreetListView.as_view() , name='street_list'),
+    path('area/<int:pk>/edit', AreaUpdateView.as_view(), name='area_edit'),
+    path('street/list', StreetListView.as_view(), name='street_list'),
     path('street/new', NewStreetView.as_view(), name='street_new'),
     path('street/edit', BulkUpdateStreetView.as_view(), name='street_bulk_edit'),
     path('street/delete', views.street_delete, name='street_delete'),

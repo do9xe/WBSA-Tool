@@ -13,32 +13,15 @@
             <div class="row mb-2">
                 <h5 class="offset-sm-3">Gebiet</h5>
             </div>
+	        {% for field in form %}
 	        <div class="row mb-3">
-                <label for="name" class="col-sm-3 col-form-label text-lg-end">Name</label>
+                {{ field.errors }}
+                <label for="name" class="col-sm-3 col-form-label text-lg-end">{{ field.label_tag }}</label>
                 <div class="col">
-                    <input type="text" name="name" value="{{ area.name }}" maxlength="64" class="form-control" placeholder="Name" id="name">
+                    {{ field }}
                 </div>
             </div>
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label text-lg-end" for="is_parent">ist ein Fahrzeug</label>
-                <div class="col py-2">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="is_parent" id="is_parent" {%if area.is_parent%}checked{%endif%}>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="parent" class="col-sm-3 col-form-label text-lg-end">Fahrzeug</label>
-                <div class="col">
-                    <select class="form-select" name="parent" id="parent">
-                        <option value="None">None</option>
-                        {% for parent in parent_area_list %}
-                        <option value="{{parent.id}}"{%if area.parent == parent %}selected{%endif%}>{{parent.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
+            {% endfor %}
         <div class="text-end my-3">
                 <button type="submit" name="update" class="btn btn-primary">Speichern</button>
                 <a class="btn btn-outline-danger" href="{% url 'frontend:area_list' %}">Abbrechen</a>
