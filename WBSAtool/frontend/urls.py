@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic.base import RedirectView
 from . import views, auth_views
 from .view_collection.area import AreaListView, AreaCreateView, AreaUpdateView
-from .view_collection.street import StreetListView, NewStreetView, UpdateStreetView, BulkUpdateStreetView
+from .view_collection.street import StreetListView, StreetCreateView, StreetUpdateView, StreetBulkUpdateView
 from .view_collection.timeslot import TimeslotListView
 from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected, AppointmentMapView, AppointmentStatsView
 from .view_collection.collect import CollectMenu, CollectList
@@ -16,12 +16,12 @@ urlpatterns = [
     path('area/<int:area_id>', views.area_view, name='area_view'),
     path('area/<int:pk>/edit', AreaUpdateView.as_view(), name='area_edit'),
     path('street/list', StreetListView.as_view(), name='street_list'),
-    path('street/new', NewStreetView.as_view(), name='street_new'),
-    path('street/edit', BulkUpdateStreetView.as_view(), name='street_bulk_edit'),
+    path('street/new', StreetCreateView.as_view(), name='street_new'),
+    path('street/edit', StreetBulkUpdateView.as_view(), name='street_bulk_edit'),
     path('street/delete', views.street_delete, name='street_delete'),
     path('street/bulkadd', views.street_bulkadd, name='street_bulkadd'),
     path('street/osm_import', views.street_osm_import, name='street_osm_import'),
-    path('street/<int:pk>/edit', UpdateStreetView.as_view(), name='street_edit'),
+    path('street/<int:pk>/edit', StreetUpdateView.as_view(), name='street_edit'),
     path('timeslot/list', TimeslotListView.as_view(), name='timeslot_list'),
     path('timeslot/delete', views.timeslot_delete, name='timeslot_delete'),
     path('timeslot/new', views.timeslot_new, name='timeslot_new'),

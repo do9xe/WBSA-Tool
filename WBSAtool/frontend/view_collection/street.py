@@ -9,21 +9,21 @@ class StreetListView(WBSAListView):
     template_name = "street/street_list.html"
 
 
-class NewStreetView(WBSACreateView):
+class StreetCreateView(WBSACreateView):
     model = Street
     form_class = StreetForm
     template_name = "street/street_edit.html"
     redirect_to = "frontend:street_list"
 
 
-class UpdateStreetView(WBSAUpdateView):
+class StreetUpdateView(WBSAUpdateView):
     model = Street
     form_class = StreetForm
     template_name = "street/street_edit.html"
     redirect_to = "frontend:street_list"
 
 
-class BulkUpdateStreetView(WBSABulkUpdateView):
+class StreetBulkUpdateView(WBSABulkUpdateView):
     model = Street
     form_class = BulkUpdateStreetForm
     template_name = "bulk_edit.html"
