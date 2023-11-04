@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block titel %}{{ form.Meta.titel }}{% endblock titel %}
+{% block titel %}{{ form.Meta.titel }} {% if object %}bearbeiten{% else %}erstellen{% endif %}{% endblock titel %}
 
 {% block data %}
 <form method="post" class="form-object-edit mt-5">

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block titel %}Bulk-Edit{% endblock titel %}
+{% block titel %}{{ form.Meta.titel }}{% endblock titel %}
 
 {% block data %}
     <form method="post" class="form-object-edit mt-5">

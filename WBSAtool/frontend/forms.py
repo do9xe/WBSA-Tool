@@ -21,7 +21,7 @@ class StreetForm(forms.ModelForm):
     class Meta:
         model = Street
         exclude = ["osm_imported"]
-        titel = "Straße bearbeiten"
+        titel = "Straße"
     name = forms.CharField(label="Straßenname",
                            max_length=200,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -44,7 +44,7 @@ class AreaForm(forms.ModelForm):
     class Meta:
         model = Area
         exclude = []
-        titel = "Gebiet bearbeiten"
+        titel = "Gebiet"
     name = forms.CharField(label="Name",
                            max_length=200,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
