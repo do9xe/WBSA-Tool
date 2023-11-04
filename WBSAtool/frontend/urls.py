@@ -3,7 +3,7 @@ from django.views.generic.base import RedirectView
 from . import views, auth_views
 from .view_collection.area import AreaListView, AreaCreateView, AreaUpdateView
 from .view_collection.street import StreetListView, StreetCreateView, StreetUpdateView, StreetBulkUpdateView
-from .view_collection.timeslot import TimeslotListView
+from .view_collection.timeslot import TimeslotListView, TimeslotCreateView, TimeslotUpdateView
 from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected, AppointmentMapView, AppointmentStatsView
 from .view_collection.collect import CollectMenu, CollectList
 
@@ -24,8 +24,8 @@ urlpatterns = [
     path('street/<int:pk>/edit', StreetUpdateView.as_view(), name='street_edit'),
     path('timeslot/list', TimeslotListView.as_view(), name='timeslot_list'),
     path('timeslot/delete', views.timeslot_delete, name='timeslot_delete'),
-    path('timeslot/new', views.timeslot_new, name='timeslot_new'),
-    path('timeslot/<int:timeslot_id>/edit', views.timeslot_edit, name='timeslot_edit'),
+    path('timeslot/new', TimeslotCreateView.as_view(), name='timeslot_new'),
+    path('timeslot/<int:pk>/edit', TimeslotUpdateView.as_view(), name='timeslot_edit'),
     path('timeslot/suggestion', views.timeslot_suggestion, name='timeslot_suggestion'),
     path('appointment/list', AppointmentListView.as_view(), name='appointment_list'),
     path('appointment/pdf', views.generate_pdf, name='appointment_pdf'),

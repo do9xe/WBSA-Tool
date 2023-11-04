@@ -55,3 +55,18 @@ class AreaForm(forms.ModelForm):
                                     required=False,
                                     queryset=Area.objects.filter(is_parent=True),
                                     widget=forms.Select(attrs={'class': 'form-select'}))
+
+
+class TimeslotForm(forms.ModelForm):
+    class Meta:
+        model = Timeslot
+        exclude = ["appointment_count", "is_full"]
+        titel = "Abholzeitraum"
+    date = forms.DateField(label="Datum",
+                           widget=forms.DateInput(attrs={'class': 'form-control w-auto', 'type': 'date'}))
+    time_from = forms.TimeField(label="Beginn",
+                                widget=forms.TimeInput(attrs={'class': 'form-control w-auto', 'type': 'time'}))
+    time_to = forms.TimeField(label="Ende",
+                              widget=forms.TimeInput(attrs={'class': 'form-control w-auto', 'type': 'time'}))
+    appointment_max = forms.IntegerField(label="Maximale Abholungen",
+                                         widget=forms.TextInput(attrs={'class': 'form-control w-auto'}))

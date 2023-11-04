@@ -85,36 +85,6 @@ def timeslot_delete(request):
             return HttpResponseRedirect(reverse('frontend:timeslot_list'))
 
 
-@permission_required("frontend.add_timeslot", raise_exception=True)
-def timeslot_new(request):
-    if request.method == "GET":
-        return render(request, "timeslot/timeslot_edit.html")
-    elif request.method == "POST":
-        timeslot = Timeslot()
-        timeslot.date = request.POST['date']
-        timeslot.time_from = request.POST['time_from']
-        timeslot.time_to = request.POST['time_to']
-        timeslot.appointment_max = int(request.POST['appointment_max'])
-        timeslot.save()
-        return HttpResponseRedirect(reverse('frontend:timeslot_list'))
-
-
-@permission_required("frontend.change_timeslot", raise_exception=True)
-def timeslot_edit(request, timeslot_id):
-    timeslot = get_object_or_404(Timeslot, id=timeslot_id)
-    if request.method == "GET":
-        context = {"timeslot": timeslot}
-        return render(request, "timeslot/timeslot_edit.html", context)
-    elif request.method == "POST":
-        timeslot.date = request.POST['date']
-        timeslot.time_from = request.POST['time_from']
-        timeslot.time_to = request.POST['time_to']
-        timeslot.appointment_max = int(request.POST['appointment_max'])
-        timeslot.save()
-        timeslot.update_count()
-        return HttpResponseRedirect(reverse('frontend:timeslot_list'))
-
-
 @permission_required("frontend.add_appointment", raise_exception=True)
 def timeslot_suggestion(request):
     street = get_object_or_404(Street, name=request.GET['street'])
