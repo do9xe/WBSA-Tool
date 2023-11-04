@@ -12,14 +12,12 @@ class StreetListView(WBSAListView):
 class StreetCreateView(WBSACreateView):
     model = Street
     form_class = StreetForm
-    template_name = "street/street_edit.html"
     redirect_to = "frontend:street_list"
 
 
 class StreetUpdateView(WBSAUpdateView):
     model = Street
     form_class = StreetForm
-    template_name = "street/street_edit.html"
     redirect_to = "frontend:street_list"
 
 

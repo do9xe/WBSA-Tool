@@ -21,6 +21,7 @@ class StreetForm(forms.ModelForm):
     class Meta:
         model = Street
         exclude = ["osm_imported"]
+        titel = "Straße bearbeiten"
     name = forms.CharField(label="Straßenname",
                            max_length=200,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -30,6 +31,8 @@ class StreetForm(forms.ModelForm):
 
 
 class BulkUpdateStreetForm(forms.Form):
+    class Meta:
+        titel = "mehrere Straßen bearbeiten"
     area = forms.ModelChoiceField(label="Gebiet",
                                   queryset=Area.objects.filter(is_parent=False),
                                   widget=forms.Select(attrs={'class': 'form-select'}))
@@ -41,6 +44,7 @@ class AreaForm(forms.ModelForm):
     class Meta:
         model = Area
         exclude = []
+        titel = "Gebiet bearbeiten"
     name = forms.CharField(label="Name",
                            max_length=200,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))

@@ -12,12 +12,10 @@ class AreaListView(WBSAListView):
 class AreaCreateView(WBSACreateView):
     model = Area
     form_class = AreaForm
-    template_name = "area/area_edit.html"
     redirect_to = "frontend:area_list"
 
 
 class AreaUpdateView(WBSAUpdateView):
     model = Area
     form_class = AreaForm
-    template_name = "area/area_edit.html"
     redirect_to = "frontend:area_list"

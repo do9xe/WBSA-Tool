@@ -22,14 +22,16 @@ class WBSAListView(WBSAPermissionMixin, ListView):
 class WBSACreateView(WBSAPermissionMixin, CreateView):
     required_list = ["create"]
     redirect_to = ""
+    template_name = "model_edit.html"
 
     def get_success_url(self):
         return reverse(self.redirect_to)
 
 
 class WBSAUpdateView(WBSAPermissionMixin, UpdateView):
-    required_list = ["create"]
+    required_list = ["change"]
     redirect_to = ""
+    template_name = "model_edit.html"
 
     def get_success_url(self):
         return reverse(self.redirect_to)
@@ -38,7 +40,7 @@ class WBSAUpdateView(WBSAPermissionMixin, UpdateView):
 class WBSABulkUpdateView(WBSAPermissionMixin, View):
     model = None
     form_class = None
-    required_list = ["update"]
+    required_list = ["change"]
     redirect_to = ""
     template_name = ""
 

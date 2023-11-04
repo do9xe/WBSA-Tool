@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block titel %}{{ form.Meta.titel }}{% endblock titel %}
+
+{% block data %}
+<form method="post" class="form-object-edit mt-5">
+{% csrf_token %}
+    <div class="field-group my-5">
+    {% for field in form %}
+        <div class="row mb-3">
+            {{ field.errors }}
+            <label for="name" class="col-sm-3 col-form-label text-lg-end">{{ field.label_tag }}</label>
+            <div class="col">
+                {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="text-end my-3">
+            <button type="submit" value="Submit" class="btn btn-primary">Speichern</button>
+            <a class="btn btn-outline-danger" href="{% url view.redirect_to %}">Abbrechen</a>
+    </div>
+</form>
+
+{% endblock data %}
