@@ -8,7 +8,7 @@ from backend.models import Area, Street, Timeslot, Appointment
 from .utils.ReportLabWrapper import ReportLab, wrap_text
 
 
-@permission_required("frontend.delete_area", raise_exception=True)
+@permission_required("backend.delete_area", raise_exception=True)
 def area_delete(request):
     if request.method == 'POST':
         if request.POST['action'] == "delete_areas":
@@ -21,7 +21,7 @@ def area_delete(request):
             return HttpResponseRedirect(reverse('frontend:area_list'))
 
 
-@permission_required("frontend.view_area", raise_exception=True)
+@permission_required("backend.view_area", raise_exception=True)
 def area_view(request, area_id):
     if request.GET['format'] == "modal":
         area = get_object_or_404(Area, id=area_id)
@@ -40,7 +40,7 @@ def area_view(request, area_id):
         return HttpResponse("Error, only intended von indirect use")
 
 
-@permission_required("frontend.delete_street", raise_exception=True)
+@permission_required("backend.delete_street", raise_exception=True)
 def street_delete(request):
     if request.method == 'POST':
         if request.POST['action'] == "delete":
@@ -49,7 +49,7 @@ def street_delete(request):
             return HttpResponseRedirect(reverse('frontend:street_list'))
 
 
-@permission_required("frontend.add_street", raise_exception=True)
+@permission_required("backend.add_street", raise_exception=True)
 def street_bulkadd(request):
     if request.method == 'GET':
         return render(request, 'street/street_bulk_add.html')
@@ -76,7 +76,7 @@ def street_bulkadd(request):
             return render(request, "error_page.html", context)
 
 
-@permission_required("frontend.delete_timeslot", raise_exception=True)
+@permission_required("backend.delete_timeslot", raise_exception=True)
 def timeslot_delete(request):
     if request.method == 'POST':
         if request.POST['action'] == "delete":
@@ -85,7 +85,7 @@ def timeslot_delete(request):
             return HttpResponseRedirect(reverse('frontend:timeslot_list'))
 
 
-@permission_required("frontend.add_appointment", raise_exception=True)
+@permission_required("backend.add_appointment", raise_exception=True)
 def timeslot_suggestion(request):
     street = get_object_or_404(Street, name=request.GET['street'])
     TimeslotList = Timeslot.objects.all()
@@ -103,7 +103,7 @@ def timeslot_suggestion(request):
     return render(request, "timeslot/timeslot_suggestion.html", context)
 
 
-@permission_required("frontend.delete_appointment", raise_exception=True)
+@permission_required("backend.delete_appointment", raise_exception=True)
 def appointment_delete(request):
     if request.method == "POST":
         if request.POST['action'] == "delete":
@@ -112,7 +112,7 @@ def appointment_delete(request):
             return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
 
-@permission_required("frontend.view_appointment", raise_exception=True)
+@permission_required("backend.view_appointment", raise_exception=True)
 def appointment_view(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.GET['format'] == "modal":
@@ -120,7 +120,7 @@ def appointment_view(request, appointment_id):
         return render(request, 'appointment/appointment_modal.html', context)
 
 
-@permission_required("frontend.change_appointment", raise_exception=True)
+@permission_required("backend.change_appointment", raise_exception=True)
 def appointment_edit(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.method == 'GET':
@@ -142,7 +142,7 @@ def appointment_edit(request, appointment_id):
         return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
 
-@permission_required("frontend.add_appointment", raise_exception=True)
+@permission_required("backend.add_appointment", raise_exception=True)
 def appointment_new(request):
     if request.method == 'GET':
         StreetList = Street.objects.all()
@@ -170,7 +170,7 @@ def appointment_new(request):
         return HttpResponseRedirect(reverse('frontend:appointment_map'))
 
 
-@permission_required("frontend.add_street", raise_exception=True)
+@permission_required("backend.add_street", raise_exception=True)
 def street_osm_import(request):
     if request.method == "GET":
         plz = request.GET['plz']
@@ -195,7 +195,7 @@ def street_osm_import(request):
         return HttpResponse(str(street_list))
 
 
-@permission_required("frontend.view_appointment", raise_exception=True)
+@permission_required("backend.view_appointment", raise_exception=True)
 def generate_pdf(request):
     vehicle_list = Area.objects.filter(is_parent=True)
     timeslot_list = Timeslot.objects.all().order_by("date")
