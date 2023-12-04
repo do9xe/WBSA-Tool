@@ -9,24 +9,39 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+if hsts := os.environ.get("HSTS_SECONDS", ""):
+    SECURE_HSTS_SECONDS = int(hsts)
+    SECURE_HSTS_PRELOAD = True
+
+if os.environ.get("DEBUG", False) == "True":
+    DEBUG = True
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+if trusted_origins := os.environ.get("TRUSTED_ORIGINS", ""):
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in trusted_origins.split(",")]
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--d2684=899@f#3a(q1ztoa1c!63s)w75y5trh$4-ea*$j(m3ex'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if not DEBUG:
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+else:
+    SECRET_KEY = 'django-insecure-x-01p(oqi8%(jj$t^$q+1n7l_9d^ku)%o3kidmg#oyr__477w&'
 
 ALLOWED_HOSTS = []
 
+if "ALLOWED_HOSTS" in os.environ:
+    ALLOWED_HOSTS = [host.strip() for host in os.environ["ALLOWED_HOSTS"].split(",")]
 
 # Application definition
 
@@ -74,16 +89,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'WBSAtool.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+def _create_postgres():
+    return { 'default':  {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',                                   # Database name
+        'USER': os.environ.get("POSTGRES_USER", "postgres"),  # PostgreSQL username
+        'PASSWORD': os.environ.get("POSTGRES_PASS", ""),      # PostgreSQL password
+        'HOST': os.environ.get("POSTGRES_HOST", "localhost"), # Database server
+        'PORT': os.environ.get("POSTGRES_PORT", "5432"),      # Database port (leave blank for default)
+        'CONN_MAX_AGE': 300,                                  # Max database connection age
     }
 }
+
+
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+match os.environ.get("DATABASE", "").upper():
+    case "POSTGRES":
+        DATABASES = _create_postgres()
+    case _:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 
 # Password validation
@@ -125,21 +155,17 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'Europe/Berlin'
-
 USE_I18N = True
-
 USE_L10N = False
-
 USE_TZ = True
 
+TIME_ZONE = 'Europe/Berlin'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H:i:s'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+STATIC_ROOT = '/static'
 STATIC_URL = '/static/'
 
 # Default primary key field type
