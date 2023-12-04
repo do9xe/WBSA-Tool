@@ -11,8 +11,11 @@
         <small class="text-muted">{{ user.username }}</small>
     </p>
     <hr class="dropdown-divider">
-    <a class="dropdown-item disabled" href="#"><i class="fas fa-user mr-2"></i>Account</a>
-    <a class="dropdown-item disabled" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
+    {% if request.user.is_staff %}
+        <a class="dropdown-item" href="/admin"><i class="fas fa-user mr-2"></i>Backend</a>
+    {% else %}
+        <a class="dropdown-item disabled"><i class="fas fa-user mr-2"></i>Backend</a>
+    {% endif %}
     <a class="dropdown-item" href="{% url 'frontend:logout' %}"><i class="fas fa-power-off mr-2"></i>Logout</a>
 {# hier hört das dropdown dann auf #}
 {% else %}
