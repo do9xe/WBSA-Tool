@@ -12,6 +12,7 @@ class WBSAPermissionMixin(PermissionRequiredMixin):
     def get_permission_required(self):
         for code in self.required_list:
             codename = f"backend.{code}_{self.model._meta.model_name}"
+            print(codename)
             yield codename
 
 
@@ -20,7 +21,7 @@ class WBSAListView(WBSAPermissionMixin, ListView):
 
 
 class WBSACreateView(WBSAPermissionMixin, CreateView):
-    required_list = ["create"]
+    required_list = ["add"]
     redirect_to = ""
     template_name = "model_edit.html"
 
