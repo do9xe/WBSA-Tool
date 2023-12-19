@@ -4,7 +4,7 @@
         <div class="list-group w-50">
             {% for suggestion in suggestion_list %}
             <a onclick="acceptSuggestion({{ suggestion.timeslot.id }})" class="list-group-item list-group-item-action">
-                {{suggestion.timeslot.date}}, Zwischen {{suggestion.timeslot.time_from}} und {{suggestion.timeslot.time_to}} Uhr
+                {{suggestion.timeslot.date}}, Zwischen {{suggestion.timeslot.time_from|date:"H:i"}} und {{suggestion.timeslot.time_to|date:"H:i"}} Uhr
                 <span class="badge rounded-pill bg-primary float-end">{{ suggestion.count }}</span>
             </a>
             {% endfor %}

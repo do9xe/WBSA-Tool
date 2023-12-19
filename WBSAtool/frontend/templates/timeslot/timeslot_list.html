@@ -23,8 +23,8 @@
         <tr>
             <td><input type="checkbox" class="toggle form-check-input" name="select_row" value="{{timeslot.id}}"></td>
             <td>{{timeslot.date}}</td>
-            <td>{{timeslot.time_from}}</td>
-            <td>{{timeslot.time_to}}</td>
+            <td>{{timeslot.time_from|date:"H:i"}}</td>
+            <td>{{timeslot.time_to|date:"H:i"}}</td>
             <td>
                 {% with timeslot.get_percentage as percentage %}
                 <div class="progress" role="progressbar" aria-valuenow="{{ timeslot.appointment_count }}" aria-valuemin="0" aria-valuemax="{{ timeslot.appointment_max }}">

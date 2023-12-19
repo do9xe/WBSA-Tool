@@ -15,7 +15,7 @@ function createMarker(appointment) {
             + appointment.contact_name
             +'<br>'+ appointment.street.name + ' ' + appointment.house_number
             +'<br>Abholdatum: '+ appointment.timeslot.date
-            +'<br>' + appointment.timeslot.time_from + ' bis ' + appointment.timeslot.time_to + ' Uhr' +
+            +'<br>' + appointment.timeslot.time_from.slice(0,-3) + ' bis ' + appointment.timeslot.time_to.slice(0,-3) + ' Uhr' +
             '</div>',popupOption).openPopup();
     })
     .on("mouseout", event => {

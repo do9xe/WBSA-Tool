@@ -5,6 +5,7 @@ from backend.models import Timeslot
 
 class TimeslotListView(WBSAListView):
     model = Timeslot
+    ordering = ["date", "time_from"]
     context_object_name = "timeslot_list"
     template_name = "timeslot/timeslot_list.html"
 

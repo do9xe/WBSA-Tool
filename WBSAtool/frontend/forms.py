@@ -2,7 +2,6 @@ from django import forms
 from backend.models import Area, Street, Timeslot
 from django.forms.models import ModelChoiceField
 
-
 class TimeslotChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return f"{obj.date}, {obj.time_from} bis {obj.time_to}"
@@ -65,8 +64,10 @@ class TimeslotForm(forms.ModelForm):
     date = forms.DateField(label="Datum",
                            widget=forms.DateInput(attrs={'class': 'form-control w-auto', 'type': 'date'}))
     time_from = forms.TimeField(label="Beginn",
-                                widget=forms.TimeInput(attrs={'class': 'form-control w-auto', 'type': 'time'}))
+                                widget=forms.TimeInput(format='%H:%M',
+                                                       attrs={'class': 'form-control w-auto', 'type': 'time'}))
     time_to = forms.TimeField(label="Ende",
-                              widget=forms.TimeInput(attrs={'class': 'form-control w-auto', 'type': 'time'}))
+                              widget=forms.TimeInput(format='%H:%M',
+                                                     attrs={'class': 'form-control w-auto', 'type': 'time'}))
     appointment_max = forms.IntegerField(label="Maximale Abholungen",
                                          widget=forms.TextInput(attrs={'class': 'form-control w-auto'}))

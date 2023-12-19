@@ -15,7 +15,7 @@
         </li>
         <li class="list-group-item list-group-item-action">Telefon: {{appointment.phone}}</li>
         <li class="list-group-item list-group-item-action">EMail-Adresse: <a href="mailto:{{appointment.email}}">{{appointment.email}}</a></li>
-        <li class="list-group-item list-group-item-action">Abholung: {{appointment.timeslot.date}}, Zwischen {{appointment.timeslot.time_from}} und {{appointment.timeslot.time_to}} Uhr</li>
+        <li class="list-group-item list-group-item-action">Abholung: {{appointment.timeslot.date}}, Zwischen {{appointment.timeslot.time_from|date:"H:i"}} und {{appointment.timeslot.time_to|date:"H:i"}} Uhr</li>
         <li class="list-group-item list-group-item-action">Zusatz-Infos: {{appointment.text}}</li>
     </ul>
 </div>

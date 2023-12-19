@@ -25,7 +25,7 @@
             <td><input type="checkbox" class="toggle form-check-input" value="{{appointment.id}}" name="select_row"></td>
             <td>{{appointment.contact_name}}</td>
             <td>{{appointment.street}}</td>
-            <td>{{appointment.timeslot.date}} {{appointment.timeslot.time_from}}-{{appointment.timeslot.time_to}}</td>
+            <td>{{appointment.timeslot.date}}, {{appointment.timeslot.time_from|date:"H:i"}}-{{appointment.timeslot.time_to|date:"H:i"}}</td>
             <td id="status_{{appointment.id}}">
                 {% if appointment.is_collected %}
                     <i class="bi bi-check-circle-fill text-success"></i>
