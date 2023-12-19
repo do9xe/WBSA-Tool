@@ -43,6 +43,9 @@
           <li><a class="dropdown-item" href="{% url 'frontend:street_bulkadd' %}">
               <i class="bi bi-stack"></i> Massenimport</a>
           </li>
+          <li><a href="#osm_import" class="dropdown-item" data-bs-toggle="modal">
+              <i class="bi bi-cloud-download"></i> OSM Import</a>
+          </li>
         </ul>
     </div>
     <button class="btn btn-warning btn-sm" formaction="{% url 'frontend:street_bulk_edit' %}" type="submit" name="_edit">Ausgewählte bearbeiten</button>
@@ -61,6 +64,25 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" name="action" value="delete" class="btn btn-danger">Löschen</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<form method="get" action="{% url 'frontend:street_osm_import' %}">
+<div id="osm_import" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Straßen aus OpenStreetMap importieren</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            Bitte gib eine Postleitzahl ein, aus der <i>alle</i> Straßen importiert werden sollen:<br>
+                <input class="form-control" type="number" id="plz" name="plz">
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Hinzufügen</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
             </div>
         </div>

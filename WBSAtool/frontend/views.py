@@ -183,16 +183,21 @@ def street_osm_import(request):
         '''
         response = requests.get(overpass_url, params={'data': overpass_query})
         raw_data = response.json()
+        osm_list = []
         street_list = []
         for street in raw_data['elements']:
             if "name" in street['tags']:
-                street_list.append(street['tags']['name'])
-        street_list = list(dict.fromkeys(street_list))
-        for street in street_list:
+                osm_list.append(street['tags']['name'])
+        osm_list = list(dict.fromkeys(osm_list))
+        for street in osm_list:
+            if Street.objects.filter(name=street).exists():
+                continue
+            street_list.append(street)
             new_street = Street(name=street)
             new_street.osm_imported = True
             new_street.save()
-        return HttpResponse(str(street_list))
+        context = {"street_list": street_list}
+        return render(request, "street/osm_import_confirm.html", context)
 
 
 @permission_required("backend.view_appointment", raise_exception=True)

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block data %}
+    <h4>Folgende {{ street_list|length }} Straßen wurden neu hinzugefügt:</h4>
+    <ul>
+    {% for street in street_list %}
+    <li>{{ street }}</li>
+    {% endfor %}
+    </ul>
+{% endblock data %}
