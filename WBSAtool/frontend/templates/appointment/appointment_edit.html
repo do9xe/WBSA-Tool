@@ -64,7 +64,7 @@
                 <label for="timeslot" class="col-sm-3 col-form-label text-lg-end">Zeitslot*</label>
                 <div class="col">
                     <select class="form-select" name="timeslot" id="timeslot">
-                        <option value="None">None</option>
+                        <option value="None">-----</option>
                         {% for timeslot in timeslot_list %}
                         <option value="{{timeslot.id}}" {%if appointment.timeslot == timeslot %}selected{% elif timeslot.is_full %}disabled{%endif%} {% if not appointment and timeslot.is_full %}disabled{% endif %}>
                             {{timeslot.date}}, {{timeslot.time_from|date:"H:i"}} bis {{timeslot.time_to|date:"H:i"}} {% if timeslot.is_full %} - AUSGEBUCHT!{% endif %}

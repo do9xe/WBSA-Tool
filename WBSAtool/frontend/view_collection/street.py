@@ -5,6 +5,7 @@ from frontend.forms import StreetForm, BulkUpdateStreetForm
 
 class StreetListView(WBSAListView):
     model = Street
+    ordering = ["name"]
     context_object_name = "street_list"
     template_name = "street/street_list.html"
 

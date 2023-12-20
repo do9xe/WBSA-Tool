@@ -145,8 +145,8 @@ def appointment_edit(request, appointment_id):
 @permission_required("backend.add_appointment", raise_exception=True)
 def appointment_new(request):
     if request.method == 'GET':
-        StreetList = Street.objects.all()
-        TimeslotList = Timeslot.objects.all()
+        StreetList = Street.objects.order_by("name")
+        TimeslotList = Timeslot.objects.order_by("date", "time_from")
         context = {"street_list": StreetList, 'timeslot_list': TimeslotList}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
