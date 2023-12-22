@@ -21,14 +21,18 @@
         var timeslotArray = [['Zeitraum', 'Abholungen']];
 
         tsData.forEach(timeslot => {
-          const name = timeslot.date + ", " + timeslot.time_from + " bis " + timeslot.time_to;
+          var dateObj = new Date(timeslot.date);
+          var formated_date = new Intl.DateTimeFormat("de", {day: '2-digit', month:'short', year: '2-digit'}).format(dateObj);
+          const name = formated_date + ", " + timeslot.time_from.slice(0,-3) + "-" + timeslot.time_to.slice(0,-3);
           timeslotArray.push([name, timeslot.appointment_count]);
         });
 
         var data = google.visualization.arrayToDataTable(timeslotArray);
         var options = {
           title: 'Abholungen pro Zeitraum',
-          legend: { position: "top", }
+          pieSliceText: 'value',
+          chartArea: {height: '80%', width: '90%'},
+          legend: { position: "right" }
         };
         var chart = new google.visualization.PieChart(document.getElementById('timeslot_piechart'));
         chart.draw(data, options);

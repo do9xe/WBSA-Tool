@@ -4,7 +4,7 @@ from django.forms.models import ModelChoiceField
 
 class TimeslotChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        return f"{obj.date}, {obj.time_from} bis {obj.time_to}"
+        return f"{obj.date}, {str(obj.time_from)[:-3]} bis {str(obj.time_to)[:-3]}"
 
 
 class CollectMenuForm(forms.Form):
