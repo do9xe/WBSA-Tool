@@ -21,7 +21,11 @@
     <tbody>
     <div name="appointment_view_type" id="list" style="display: none;"></div>
     {% for appointment in appointment_list %}
+        {% if appointment.lat == None %}
+        <tr class="table-warning">
+        {% else %}
         <tr>
+        {% endif %}
             <td><input type="checkbox" class="toggle form-check-input" value="{{appointment.id}}" name="select_row"></td>
             <td>{{appointment.contact_name}}</td>
             <td>{{appointment.street}}</td>

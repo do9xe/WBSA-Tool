@@ -12,7 +12,6 @@ class WBSAPermissionMixin(PermissionRequiredMixin):
     def get_permission_required(self):
         for code in self.required_list:
             codename = f"backend.{code}_{self.model._meta.model_name}"
-            print(codename)
             yield codename
 
 

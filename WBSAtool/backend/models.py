@@ -82,15 +82,25 @@ class Appointment(models.Model):
         return f"{self.contact_name}, {self.street.name} {self.house_number}"
 
     def save(self, *args, **kwargs):
-        url = "https://nominatim.openstreetmap.org/search.php"
+        url = "https://nominatim.openstreetmap.org/search"
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"}
         params = {
             "street": f"{self.street} {self.house_number}",
             "city": "Karlsruhe",
             "postalcode": "76227",
             "format": "jsonv2"
         }
-        r = requests.get(url, params=params)
-        result = r.json()[0]
-        self.lat = result['lat']
-        self.lon = result['lon']
-        super(Appointment, self).save(*args, **kwargs)
+        for i in range(1,5):
+            try:
+                r = requests.get(url, params=params, headers=headers)
+                result = r.json()[0]
+                if "lat" in result:
+                    self.lat = result['lat']
+                    self.lon = result['lon']
+                    super(Appointment, self).save(*args, **kwargs)
+                    break
+                elif i == 5:
+                    super(Appointment, self).save(*args, **kwargs)
+                    break
+            except:
+                continue
