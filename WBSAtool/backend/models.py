@@ -1,5 +1,8 @@
-from django.db import models
 import requests
+from time import sleep
+from django.db import models
+
+from backend import logger
 from WBSAtool.settings import NOMINATIM_URL
 
 class Area(models.Model):
@@ -92,14 +95,19 @@ class Appointment(models.Model):
         for i in range(1,5):
             try:
                 r = requests.get(NOMINATIM_URL, params=params, headers=headers)
+                if r.status_code != 200:
+                    logger.error(f"encountered Error {r.status_code} while getting data from nominatim")
+                    logger.error(r.text)
+                    break
                 result = r.json()[0]
                 if "lat" in result:
                     self.lat = result['lat']
                     self.lon = result['lon']
-                    super(Appointment, self).save(*args, **kwargs)
                     break
-                elif i == 5:
-                    super(Appointment, self).save(*args, **kwargs)
-                    break
-            except:
-                continue
+                else:
+                    logger.info(f"No latitude data in Response, trying again")
+                    sleep(1)
+            except Exception as e:
+                logger.error(e, stack_info=True)
+                sleep(1)
+        super(Appointment, self).save(*args, **kwargs)
