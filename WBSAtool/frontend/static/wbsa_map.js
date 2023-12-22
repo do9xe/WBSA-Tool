@@ -10,17 +10,12 @@ async function getAppointments() {
 
 function createMarker(appointment) {
     var marker = new L.Marker([appointment.lat,appointment.lon])
-    .on("mouseover",event =>{
-        event.target.bindPopup('<div>'
-            + appointment.contact_name
-            +'<br>'+ appointment.street.name + ' ' + appointment.house_number
-            +'<br>Abholdatum: '+ appointment.timeslot.date
-            +'<br>' + appointment.timeslot.time_from.slice(0,-3) + ' bis ' + appointment.timeslot.time_to.slice(0,-3) + ' Uhr' +
-            '</div>',popupOption).openPopup();
-    })
-    .on("mouseout", event => {
-        event.target.closePopup();
-    })
+    .bindPopup('<div>'
+        + appointment.contact_name
+        +'<br>'+ appointment.street.name + ' ' + appointment.house_number
+        +'<br>Abholdatum: '+ appointment.timeslot.date
+        +'<br>' + appointment.timeslot.time_from.slice(0,-3) + ' bis ' + appointment.timeslot.time_to.slice(0,-3) + ' Uhr' +
+        '</div>',popupOption).openPopup();
     return marker;
 }
 /***********************************************************
