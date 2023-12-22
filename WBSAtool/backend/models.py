@@ -1,6 +1,6 @@
 from django.db import models
 import requests
-
+from WBSAtool.settings import NOMINATIM_URL
 
 class Area(models.Model):
     name = models.CharField(max_length=200)
@@ -82,7 +82,6 @@ class Appointment(models.Model):
         return f"{self.contact_name}, {self.street.name} {self.house_number}"
 
     def save(self, *args, **kwargs):
-        url = "https://nominatim.openstreetmap.org/search"
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"}
         params = {
             "street": f"{self.street} {self.house_number}",
@@ -92,7 +91,7 @@ class Appointment(models.Model):
         }
         for i in range(1,5):
             try:
-                r = requests.get(url, params=params, headers=headers)
+                r = requests.get(NOMINATIM_URL, params=params, headers=headers)
                 result = r.json()[0]
                 if "lat" in result:
                     self.lat = result['lat']

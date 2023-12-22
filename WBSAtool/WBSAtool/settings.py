@@ -176,3 +176,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "/auth/login"
+
+NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
+if "NOMINATIM_URL" in os.environ:
+    NOMINATIM_URL = os.environ.get("NOMINATIM_URL")
