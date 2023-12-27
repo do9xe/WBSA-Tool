@@ -6,7 +6,7 @@ import requests
 
 from backend.models import Area, Street, Timeslot, Appointment
 from .utils.ReportLabWrapper import ReportLab, wrap_text
-
+from WBSAtool.settings import NOMINATIM_URL
 
 @permission_required("backend.delete_area", raise_exception=True)
 def area_delete(request):
@@ -126,7 +126,7 @@ def appointment_edit(request, appointment_id):
     if request.method == 'GET':
         StreetList = Street.objects.order_by("name")
         TimeslotList = Timeslot.objects.order_by("date", "time_from")
-        context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList}
+        context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList, 'NOMINATIM_URL': NOMINATIM_URL}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
         appointment.contact_name = request.POST['name']
@@ -147,7 +147,7 @@ def appointment_new(request):
     if request.method == 'GET':
         StreetList = Street.objects.order_by("name")
         TimeslotList = Timeslot.objects.order_by("date", "time_from")
-        context = {"street_list": StreetList, 'timeslot_list': TimeslotList}
+        context = {"street_list": StreetList, 'timeslot_list': TimeslotList, 'NOMINATIM_URL': NOMINATIM_URL}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
         contact_name = request.POST['name']

@@ -53,12 +53,14 @@
 </nav>
 
 {% if user.is_authenticated %}
+{% block container %}
 <div class="container-md">
     <div class="px-md-3 py-md-3 my-md-3 bg-light">
         <h1 class="p-3">{% block titel %}{% endblock %}</h1>
         {% block data %}{% endblock data %}
     </div>
 </div>
+{% endblock container %}
 {% else %}
     {% block authform %}{% endblock authform %}
 {% endif %}

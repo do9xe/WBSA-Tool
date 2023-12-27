@@ -2,87 +2,120 @@
 
 {% block titel %}Termin zur Abholung{% endblock titel %}
 
-{% block data %}
+{% block container %}
+<div class="container-fluid p-5">
+<div class="row">
+    <div class="col-6" name="map-col">
+        <div id="map" style="width: 100%; height: 100%;"></div>
+    </div>
+    <div class="col-6" name="form-col">
 {% if appointment.id %}
-    <form autocomplete="off" action="{% url 'frontend:appointment_edit' appointment.id %}" method="post" class="form-object-edit mt-5">
+    <form autocomplete="off" action="{% url 'frontend:appointment_edit' appointment.id %}" method="post" class="form-object-edit">
 {% else %}
-    <form autocomplete="off" action="{% url 'frontend:appointment_new' %}" method="post" class="form-object-edit mt-5">
+    <form autocomplete="off" action="{% url 'frontend:appointment_new' %}" method="post" class="form-object-edit">
 {% endif %}
-    {% csrf_token %}
-        <div class="field-group my-5">
-            <div class="row mb-2">
-                <h5 class="offset-sm-3">Kontaktdaten</h5>
-            </div>
-	        <div class="row mb-3">
-                <label for="name" class="col-sm-3 col-form-label text-lg-end">Name*</label>
-                <div class="col">
-                    <input type="text" name="name" value="{{ appointment.contact_name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name">
+        {% csrf_token %}
+            <div class="field-group my-5">
+                <div class="row mb-3">
+                    <div class="col-sm-3"></div>
+                    <div class="col">
+                    <h5 class="">Kontaktdaten</h5>
+                    </div>
                 </div>
-            </div>
+	            <div class="row mb-3">
+                    <label for="name" class="col-sm-3 col-form-label text-lg-end">Name*</label>
+                    <div class="col">
+                        <input type="text" name="name" value="{{ appointment.contact_name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name">
+                    </div>
+                </div>
 
-            <div class="row mb-3">
-                <label for="street" class="col-sm-3 col-form-label text-lg-end">Straße*</label>
-                <div class="col autocomplete">
-                    <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street" placeholder="Straße" autocomplete="off">
-                    <script>
-                        const streets = [{% for street in street_list %}"{{street.name}}",{% endfor %}];
-                        autocomplete(document.getElementById("street"), streets);
-                    </script>
+                <div class="row mb-3">
+                    <label for="street" class="col-sm-3 col-form-label text-lg-end">Straße*</label>
+                    <div class="col autocomplete">
+                        <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street" placeholder="Straße" autocomplete="off">
+                        <script>
+                            const nominatim_url = "{{ NOMINATIM_URL }}";
+                            const streets = [{% for street in street_list %}"{{street.name}}",{% endfor %}];
+                            autocomplete(document.getElementById("street"), streets);
+                        </script>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="house_number" class="col-sm-3 col-form-label text-lg-end">Hausnummer*</label>
+                    <div class="col">
+                        <input type="text" name="house_number" value="{{ appointment.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="phone" class="col-sm-3 col-form-label text-lg-end">Telefon</label>
+                    <div class="col">
+                        <input type="text" name="phone" value="{{ appointment.phone }}" maxlength="64" class="form-control" placeholder="Telefon-Nummer" id="phone">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="email" class="col-sm-3 col-form-label text-lg-end">EMail</label>
+                    <div class="col">
+                        <input type="text" name="email" value="{{ appointment.email }}" maxlength="64" class="form-control" placeholder="E-Mail Adresse" id="email">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="text" class="col-sm-3 col-form-label text-lg-end">zusätzliche Informationen</label>
+                    <div class="col">
+                        <textarea name="text" rows="5" class="form-control" placeholder="Informationen wo der Baum liegt, wie die Tür zu finden ist, etc." id="text">{{ appointment.text }}</textarea>
+                    </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <label for="house_number" class="col-sm-3 col-form-label text-lg-end">Hausnummer*</label>
-                <div class="col">
-                    <input type="text" name="house_number" value="{{ appointment.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number">
+            <div class="field-group my-5">
+                <div class="row mb-3">
+                    <div class="col-sm-3"></div>
+                    <div class="col">
+                    <h5 class="">Abholung</h5>
+                    </div>
+                </div>
+                <div id="suggestion_list"></div>
+                <div class="row mb-3">
+                    <label for="timeslot" class="col-sm-3 col-form-label text-lg-end">Zeitslot*</label>
+                    <div class="col">
+                        <select class="form-select" name="timeslot" id="timeslot">
+                            <option value="None">-----</option>
+                            {% for timeslot in timeslot_list %}
+                            <option value="{{timeslot.id}}" {%if appointment.timeslot == timeslot %}selected{% elif timeslot.is_full %}disabled{%endif%} {% if not appointment and timeslot.is_full %}disabled{% endif %}>
+                                {{timeslot.date}}, {{timeslot.time_from|date:"H:i"}} bis {{timeslot.time_to|date:"H:i"}} {% if timeslot.is_full %} - AUSGEBUCHT!{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="text-end my-3">
+                        <button type="submit" name="update" class="btn btn-primary">Speichern</button>
+                        {% if appointment %}
+                            <a class="btn btn-outline-danger" href="{% url 'frontend:appointment_list' %}">Abbrechen</a>
+                        {% else %}
+                            <a class="btn btn-outline-danger" href="{% url 'frontend:appointment_new' %}">Reset</a>
+                        {% endif %}
                 </div>
             </div>
-            <div class="row mb-3">
-                <label for="phone" class="col-sm-3 col-form-label text-lg-end">Telefon</label>
-                <div class="col">
-                    <input type="text" name="phone" value="{{ appointment.phone }}" maxlength="64" class="form-control" placeholder="Telefon-Nummer" id="phone">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="email" class="col-sm-3 col-form-label text-lg-end">EMail</label>
-                <div class="col">
-                    <input type="text" name="email" value="{{ appointment.email }}" maxlength="64" class="form-control" placeholder="E-Mail Adresse" id="email">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="text" class="col-sm-3 col-form-label text-lg-end">zusätzliche Informationen</label>
-                <div class="col">
-                    <textarea name="text" rows="5" class="form-control" placeholder="Informationen wo der Baum liegt, wie die Tür zu finden ist, etc." id="text">{{ appointment.text }}</textarea>
-                </div>
-            </div>
-        </div>
-        <div class="field-group my-5">
-            <div class="row mb-2">
-                <h5 class="offset-sm-3">Abholung</h5>
-            </div>
-            <div id="suggestion_list"></div>
-            <div class="row mb-3">
-                <label for="timeslot" class="col-sm-3 col-form-label text-lg-end">Zeitslot*</label>
-                <div class="col">
-                    <select class="form-select" name="timeslot" id="timeslot">
-                        <option value="None">-----</option>
-                        {% for timeslot in timeslot_list %}
-                        <option value="{{timeslot.id}}" {%if appointment.timeslot == timeslot %}selected{% elif timeslot.is_full %}disabled{%endif%} {% if not appointment and timeslot.is_full %}disabled{% endif %}>
-                            {{timeslot.date}}, {{timeslot.time_from|date:"H:i"}} bis {{timeslot.time_to|date:"H:i"}} {% if timeslot.is_full %} - AUSGEBUCHT!{% endif %}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="text-end my-3">
-                    <button type="submit" name="update" class="btn btn-primary">Speichern</button>
-                    {% if appointment %}
-                        <a class="btn btn-outline-danger" href="{% url 'frontend:appointment_list' %}">Abbrechen</a>
-                    {% else %}
-                        <a class="btn btn-outline-danger" href="{% url 'frontend:appointment_new' %}">Reset</a>
-                    {% endif %}
-            </div>
-        </div>
-    </form>
-<div class="field-group my-5">
+        </form>
+    </div>
 </div>
-{% endblock data %}
+</div>
+{% endblock container %}
+{% load static %}
+{% block head %}
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+<link rel="stylesheet" href="/static/leaflet.extra-markers.min.css">
+{% endblock head %}
+
+{% block jsfooter %}
+ <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script src="/static/leaflet.extra-markers.js"></script>
+<script src="{% static 'wbsa_map.js' %}"></script>
+{% endblock jsfooter%}
