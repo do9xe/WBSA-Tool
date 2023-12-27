@@ -124,8 +124,8 @@ def appointment_view(request, appointment_id):
 def appointment_edit(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.method == 'GET':
-        StreetList = Street.objects.all()
-        TimeslotList = Timeslot.objects.all()
+        StreetList = Street.objects.order_by("name")
+        TimeslotList = Timeslot.objects.order_by("date", "time_from")
         context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
