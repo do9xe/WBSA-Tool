@@ -120,22 +120,23 @@ Promise.all([getAreas(), getTimeslots(), getAppointments()]).then(results =>{
     });
     map.fitBounds(new L.LatLngBounds(bounds));
 });
+if (L.ExtraMarkers !== undefined) {
+    var newMarkerIcon = L.ExtraMarkers.icon({
+        icon: "true",
+        svg: true,
+        markerColor: "#ffeb00"
+    })
 
-var newMarkerIcon = L.ExtraMarkers.icon({
-    icon: "true",
-    svg: true,
-    markerColor: "#ffeb00"
-})
-
-var newAppMarker = new L.Marker(["0","0"], {icon: newMarkerIcon}).addTo(map);
-var typingTimer;
-document.addEventListener('DOMContentLoaded', () => {
-    var house_number = document.getElementById("house_number");
-    house_number.addEventListener("keyup", function(e) {
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(updateMarker, 1000);
+    var newAppMarker = new L.Marker(["0", "0"], {icon: newMarkerIcon}).addTo(map);
+    var typingTimer;
+    document.addEventListener('DOMContentLoaded', () => {
+        var house_number = document.getElementById("house_number");
+        house_number.addEventListener("focusout", function (e) {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(updateMarker, 500);
+        });
+        house_number.addEventListener("focus", function (e) {
+            clearTimeout(typingTimer);
+        });
     });
-    house_number.addEventListener("keydown", function(e) {
-        clearTimeout(typingTimer);
-    });
-});
+}
