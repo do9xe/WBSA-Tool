@@ -7,6 +7,7 @@ from backend.models import Appointment
 
 class AppointmentListView(WBSAListView):
     model = Appointment
+    ordering = ["timeslot__date", "timeslot__time_from"]
     context_object_name = "appointment_list"
     template_name = "appointment/appointment_list.html"
 
