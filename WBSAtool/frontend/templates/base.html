@@ -24,9 +24,18 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
     {% if user.is_authenticated %}
             <div class="navbar-nav">
-                {% if perms.backend.view_area %}<a href="{% url 'frontend:area_list' %}" class="nav-item nav-link px-3"><i class="bi bi-map"></i> Gebiete</a>{% endif %}
-                {% if perms.backend.view_street %}<a href="{% url 'frontend:street_list' %}" class="nav-item nav-link px-3"><i class="bi bi-signpost-split"></i> Straßen</a>{% endif %}
-                {% if perms.backend.view_timeslot %}<a href="{% url 'frontend:timeslot_list' %}" class="nav-item nav-link px-3"><i class="bi bi-calendar-week"></i> Zeitslots</a>{% endif %}
+                <li class="nav-item dropdown px-3">
+                    {% if perm.backend.view_area or perms.backend.view_street or perms.backend.view_timeslot %}
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-database-fill-gear"></i> Datenbank
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if perms.backend.view_area %}<a href="{% url 'frontend:area_list' %}" class="dropdown-item"><i class="bi bi-map"></i> Gebiete</a>{% endif %}
+                        {% if perms.backend.view_street %}<a href="{% url 'frontend:street_list' %}" class="dropdown-item"><i class="bi bi-signpost-split"></i> Straßen</a>{% endif %}
+                        {% if perms.backend.view_timeslot %}<a href="{% url 'frontend:timeslot_list' %}" class="dropdown-item"><i class="bi bi-calendar-week"></i> Zeitslots</a>{% endif %}
+                    </ul>
+                    {% endif %}
+                </li>
                 {% if perms.backend.view_appointment %}<a href="{% url 'frontend:appointment_list' %}" class="nav-item nav-link px-3"><i class="bi bi-houses"></i> Abholungen</a>{% endif %}
                 {% if perms.backend.change_appointment %}<a href="{% url 'frontend:collect_menu' %}" class="nav-item nav-link px-3"><i class="bi bi-truck"></i> Fahrzeug</a>{% endif %}
                 <li class="nav-item dropdown px-3">

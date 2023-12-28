@@ -80,7 +80,7 @@
                             <option value="None">-----</option>
                             {% for timeslot in timeslot_list %}
                             <option value="{{timeslot.id}}" {%if appointment.timeslot == timeslot %}selected{% elif timeslot.is_full %}disabled{%endif%} {% if not appointment and timeslot.is_full %}disabled{% endif %}>
-                                {{timeslot.date}}, {{timeslot.time_from|date:"H:i"}} bis {{timeslot.time_to|date:"H:i"}} {% if timeslot.is_full %} - AUSGEBUCHT!{% endif %}
+                                {{timeslot.date}}, {{timeslot.time_from|date:"H:i"}} bis {{timeslot.time_to|date:"H:i"}} - {% if timeslot.is_full %}AUSGEBUCHT!{% else %}Auslastung: {{ timeslot.appointment_count }}/{{ timeslot.appointment_max }}{% endif %}
                             </option>
                             {% endfor %}
                         </select>
