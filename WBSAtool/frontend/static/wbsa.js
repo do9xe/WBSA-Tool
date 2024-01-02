@@ -47,6 +47,7 @@ function autocomplete(inp, arr) {
               (or any other open lists of autocompleted values:*/
               closeAllLists();
               updateMarker();
+              loadTimeslotsForStreet(selection);
               getTimeslotSuggestions(selection);
           });
           a.appendChild(b);
@@ -172,6 +173,40 @@ async function showAreaDetails(areaID) {
     modalContentDIV.innerHTML = await response.text();
     const myModal = new bootstrap.Modal(document.getElementById("area_modal"));
     myModal.show();
+}
+
+function getTimeslotName(timeslot) {
+    var splitdate = timeslot.date.split("-");
+    var date = splitdate[2]+'.'+splitdate[1]+'.'+splitdate[0].slice(2,4)
+    return date +', '+ timeslot.time_from.slice(0,-3) + '-' + timeslot.time_to.slice(0,-3) + ' Uhr'
+}
+
+// Abrufen aller Zeitslots und ihrer Auslastungen für das Fahrzeug, das die Straße anfährt
+async function loadTimeslotsForStreet(street) {
+    const response = await fetch('/api/street');
+    const streetList = await response.json();
+    var streetObj = streetList.filter(obj => {return obj.name === street})[0];
+    try {
+        var area = streetObj.area.parent;
+    } catch (error) {
+        var area_list = await ((await fetch('/api/area?is_parent=true')).json());
+        var area = area_list[0].id;
+        alert(`Warnung! Straße ${streetObj.name} hat keine Gebietszuordnung. Es werden die Zeiträume & Auslastungen für ${area_list[0].name} angezeigt!`)
+    }
+
+    var timeslotList = await (await fetch(`/api/area/${area}/timeslots`)).json();
+    var tsSelect = document.getElementById('timeslot');
+    var innerHTML = '<option value="None">-----</option>'
+    timeslotList.forEach(ts => {
+        var attr = ""
+        var fillcount = `Auslastung: ${ts.count}/${ts.appointment_max}`
+        if (ts.count === ts.appointment_max) {
+            attr = "disabled"
+            fillcount = "AUSGEBUCHT!"
+        }
+        innerHTML += `<option value="${ts.timeslot.id}" ${attr}>${getTimeslotName(ts.timeslot)} - ${fillcount}</option>`;
+    })
+    tsSelect.innerHTML = innerHTML;
 }
 
 // Abrufen einer Liste mit Zeitraum-Vorschlägen auf Basis der Straße

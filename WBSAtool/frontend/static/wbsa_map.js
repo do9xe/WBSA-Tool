@@ -11,12 +11,6 @@ function stringToColor(str) {
   return colour
 }
 
-function getTimeslotName(timeslot) {
-    var splitdate = timeslot.date.split("-");
-    var date = splitdate[2]+'.'+splitdate[1]+'.'+splitdate[0].slice(2,4)
-    return date +', '+ timeslot.time_from.slice(0,-3) + '-' + timeslot.time_to.slice(0,-3) + ' Uhr'
-}
-
 function setNewAppMarker(lat, long) {
     newAppMarker.setLatLng([lat, long]);
     map.flyTo([lat, long], 16);

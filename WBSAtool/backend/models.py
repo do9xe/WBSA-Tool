@@ -17,6 +17,19 @@ class Area(models.Model):
     def __str__(self):
         return self.name
 
+    def get_timeslots(self):
+        if not self.is_parent:
+            return []
+        logger.error(f"Area {self.name} has no parent, returning empty Timeslot List")
+        list = []
+        for ts in Timeslot.objects.order_by("date", "time_from"):
+            list.append({"area": self,
+                "timeslot":ts,
+                "appointment_max":ts.appointment_max,
+                "count":ts.get_count_per_area(self.id),
+                "percentage":ts.get_percentage_per_area(self.id)})
+        return list
+
 
 class Street(models.Model):
     name = models.CharField(max_length=200)
@@ -43,16 +56,27 @@ class Timeslot(models.Model):
         return f"{self.date}_{self.time_from}_{self.time_to}"
 
     def update_count(self):
-        self.appointment_count = Appointment.objects.filter(timeslot=self).count()
-        if self.appointment_count >= self.appointment_max:
-            self.is_full = True
-        else:
-            self.is_full = False
-        self.save()
-
+        logger.warning("timeslot.update_count() is deprecated")
     def get_percentage(self):
+        logger.warning("timeslot.get_percentage() is deprecated")
         percentage = 100 / self.appointment_max * self.appointment_count
         return percentage
+
+    def get_count_per_area(self, area_id):
+        count = Appointment.objects.filter(timeslot=self, street__area__parent_id=area_id).count()
+        return count
+
+    def get_percentage_per_area(self, area_id):
+        percentage = 100 / self.appointment_max * self.get_count_per_area(area_id)
+        return percentage
+
+    def get_all_percentage(self):
+        list = []
+        for area in Area.objects.filter(is_parent=True):
+            list.append({"id":area.id, "name":area.name,
+                         "percentage":self.get_percentage_per_area(area.id),
+                         "count":self.get_count_per_area(area.id)})
+        return list
 
 
 class Appointment(models.Model):

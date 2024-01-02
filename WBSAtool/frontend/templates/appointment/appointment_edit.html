@@ -25,14 +25,14 @@
 	            <div class="row mb-3">
                     <label for="name" class="col-sm-3 col-form-label text-lg-end">Name*</label>
                     <div class="col">
-                        <input type="text" name="name" value="{{ appointment.contact_name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name">
+                        <input type="text" name="name" value="{{ appointment.contact_name }}" maxlength="64" class="form-control" placeholder="Name auf Klingelschild" id="name" required>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label for="street" class="col-sm-3 col-form-label text-lg-end">Straße*</label>
                     <div class="col autocomplete">
-                        <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street" placeholder="Straße" autocomplete="off">
+                        <input type="text" name="street" value="{{ appointment.street }}" class="form-control" id="street" placeholder="Straße" autocomplete="off" required>
                         <script>
                             const nominatim_url = "{{ NOMINATIM_URL }}";
                             const streets = [{% for street in street_list %}"{{street.name}}",{% endfor %}];
@@ -43,7 +43,7 @@
                 <div class="row mb-3">
                     <label for="house_number" class="col-sm-3 col-form-label text-lg-end">Hausnummer*</label>
                     <div class="col">
-                        <input type="text" name="house_number" value="{{ appointment.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number">
+                        <input type="text" name="house_number" value="{{ appointment.house_number }}" maxlength="64" class="form-control" placeholder="Hausnummer" id="house_number" required>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -76,13 +76,14 @@
                 <div class="row mb-3">
                     <label for="timeslot" class="col-sm-3 col-form-label text-lg-end">Zeitslot*</label>
                     <div class="col">
-                        <select class="form-select" name="timeslot" id="timeslot">
-                            <option value="None">-----</option>
-                            {% for timeslot in timeslot_list %}
-                            <option value="{{timeslot.id}}" {%if appointment.timeslot == timeslot %}selected{% elif timeslot.is_full %}disabled{%endif%} {% if not appointment and timeslot.is_full %}disabled{% endif %}>
-                                {{timeslot.date}}, {{timeslot.time_from|date:"H:i"}} bis {{timeslot.time_to|date:"H:i"}} - {% if timeslot.is_full %}AUSGEBUCHT!{% else %}Auslastung: {{ timeslot.appointment_count }}/{{ timeslot.appointment_max }}{% endif %}
+                        <select class="form-select" name="timeslot" id="timeslot" required>
+                            {% if appointment %}
+                            {% for ts in timeslot_list %}
+                                <option value="{{ts.timeslot.id}}" {%if appointment.timeslot.id == ts.timeslot.id %}selected{%endif%} {% if ts.percentage >= 100 %} disabled {% endif %}>
+                                {{ts.timeslot.date}}, {{ts.timeslot.time_from|date:"H:i"}} bis {{ts.timeslot.time_to|date:"H:i"}} - {% if ts.percentage >= 100 %}AUSGEBUCHT!{% else %}Auslastung: {{ ts.count }}/{{ ts.appointment_max }}{% endif %}
                             </option>
                             {% endfor %}
+                            {% endif %}
                         </select>
                     </div>
                 </div>

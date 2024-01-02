@@ -22,6 +22,23 @@ class TimeslotSerializer(serializers.ModelSerializer):
         fields = ['id', 'date', 'time_from', 'time_to', 'appointment_max', 'appointment_count', 'is_full']
 
 
+class TimeslotCountSerializer(serializers.BaseSerializer):
+    class Meta:
+        model = Timeslot
+
+    def __init__(self, instance, area=None, **kwargs):
+        super().__init__(instance, **kwargs)
+        self.area = area
+
+    def to_representation(self, timeslot):
+        data = {"area": AreaSerializer(self.area, read_only=True).data,
+                "timeslot":TimeslotSerializer(timeslot, read_only=True).data,
+                "appointment_max":timeslot.appointment_max,
+                "count":timeslot.get_count_per_area(self.area),
+                "percentage":timeslot.get_percentage_per_area(self.area)}
+        return data
+
+
 class AppointmentSerializer(serializers.ModelSerializer):
     street = StreetSerializer(read_only=True)
     timeslot = TimeslotSerializer(read_only=True)

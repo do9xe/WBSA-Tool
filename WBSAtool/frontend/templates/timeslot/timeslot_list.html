@@ -26,12 +26,23 @@
             <td>{{timeslot.time_from|date:"H:i"}}</td>
             <td>{{timeslot.time_to|date:"H:i"}}</td>
             <td>
-                {% with timeslot.get_percentage as percentage %}
-                <div class="progress" role="progressbar" aria-valuenow="{{ timeslot.appointment_count }}" aria-valuemin="0" aria-valuemax="{{ timeslot.appointment_max }}">
-                    <div class="progress-bar progress-bar-striped overflow-visible {% if percentage >= 100 %}bg-danger{% elif percentage >= 70 %}bg-warning{% else %}bg-success{% endif %}" style="width: {{ percentage }}%">
-                    {{ timeslot.appointment_count }}/{{ timeslot.appointment_max }}
+                {% with timeslot.get_all_percentage as p_list %}
+                {% for p_entry in p_list %}
+                <div class="d-flex align-items-center">
+                    <span>{{ p_entry.name }}</span>
+                    <div class="col mx-2">
+                        <div class="progress" role="progressbar">
+                            <div class="progress-bar progress-bar-striped overflow-visible
+                            {% if p_entry.percentage >= 100 %}bg-danger
+                            {% elif p_entry.percentage >= 70 %}bg-warning text-dark
+                            {% elif p_entry.percentage <= 10 %}bg-success text-dark
+                            {% else %}bg-success{% endif %}" style="width: {{ p_entry.percentage }}%">
+                            {{ p_entry.count }}/{{ timeslot.appointment_max }}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
                 {% endwith %}
             </td>
             <td class="noprint text-end text-nowrap">

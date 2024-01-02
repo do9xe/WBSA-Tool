@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import permission_required
 import requests
 
 from backend.models import Area, Street, Timeslot, Appointment
+from backend.serializers import TimeslotCountSerializer
 from .utils.ReportLabWrapper import ReportLab, wrap_text
 from WBSAtool.settings import NOMINATIM_URL
 
@@ -125,7 +126,13 @@ def appointment_edit(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.method == 'GET':
         StreetList = Street.objects.order_by("name")
-        TimeslotList = Timeslot.objects.order_by("date", "time_from")
+        if (appointment.street.area) and (appointment.street.area.parent) :
+            TimeslotList = Area.objects.get(id=appointment.street.area.parent.id).get_timeslots()
+        else:
+            TimeslotList = [{"timeslot":appointment.timeslot,
+                            "appointment_max":appointment.timeslot.appointment_max,
+                            "count":"X",
+                            "percentage":"X%"}]
         context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList, 'NOMINATIM_URL': NOMINATIM_URL}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
@@ -137,8 +144,6 @@ def appointment_edit(request, appointment_id):
         appointment.phone = request.POST['phone']
         appointment.email = request.POST['email']
         appointment.save()
-        for timeslot in Timeslot.objects.all():
-            timeslot.update_count()
         return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
 
@@ -146,8 +151,7 @@ def appointment_edit(request, appointment_id):
 def appointment_new(request):
     if request.method == 'GET':
         StreetList = Street.objects.order_by("name")
-        TimeslotList = Timeslot.objects.order_by("date", "time_from")
-        context = {"street_list": StreetList, 'timeslot_list': TimeslotList, 'NOMINATIM_URL': NOMINATIM_URL}
+        context = {"street_list": StreetList, 'NOMINATIM_URL': NOMINATIM_URL}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
         contact_name = request.POST['name']
@@ -165,8 +169,6 @@ def appointment_new(request):
         if email:
             newAppointment.email = email
         newAppointment.save()
-        for timeslot in Timeslot.objects.all():
-            timeslot.update_count()
         return HttpResponseRedirect(reverse('frontend:appointment_map'))
 
 
