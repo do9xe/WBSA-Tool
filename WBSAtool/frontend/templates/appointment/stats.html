@@ -19,13 +19,17 @@
 
         //Code für das Zeitslot Tortendiagramm
         var timeslotArray = [['Zeitraum', 'Abholungen']];
-
-        tsData.forEach(timeslot => {
+        for (const timeslot of tsData) {
+          var appointment_count = 0
+          for (const parent of parentAreaData) {
+              var sCount = await (await fetch(`/api/timeslot/${timeslot.id}/count?area=${parent.id}`)).json();
+              appointment_count += sCount.count;
+          }
           var dateObj = new Date(timeslot.date);
           var formated_date = new Intl.DateTimeFormat("de", {day: '2-digit', month:'short', year: '2-digit'}).format(dateObj);
           const name = formated_date + ", " + timeslot.time_from.slice(0,-3) + "-" + timeslot.time_to.slice(0,-3);
-          timeslotArray.push([name, timeslot.appointment_count]);
-        });
+          timeslotArray.push([name, appointment_count]);
+        };
 
         var data = google.visualization.arrayToDataTable(timeslotArray);
         var options = {
