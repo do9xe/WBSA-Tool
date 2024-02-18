@@ -49,18 +49,9 @@ class Timeslot(models.Model):
     time_from = models.TimeField()
     time_to = models.TimeField()
     appointment_max = models.IntegerField()
-    appointment_count = models.IntegerField(default=0)
-    is_full = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.date}_{self.time_from}_{self.time_to}"
-
-    def update_count(self):
-        logger.warning("timeslot.update_count() is deprecated")
-    def get_percentage(self):
-        logger.warning("timeslot.get_percentage() is deprecated")
-        percentage = 100 / self.appointment_max * self.appointment_count
-        return percentage
 
     def get_count_per_area(self, area_id):
         count = Appointment.objects.filter(timeslot=self, street__area__parent_id=area_id).count()

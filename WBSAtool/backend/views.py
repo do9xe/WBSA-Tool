@@ -31,7 +31,7 @@ class StreetDetail(generics.RetrieveUpdateDestroyAPIView):
 class TimeslotList(generics.ListCreateAPIView):
     queryset = Timeslot.objects.all()
     serializer_class = TimeslotSerializer
-    filterset_fields = ['id', 'date', 'time_from', 'time_to', 'appointment_max', 'appointment_count', 'is_full']
+    filterset_fields = ['id', 'date', 'time_from', 'time_to', 'appointment_max']
 
 
 class TimeslotDetail(generics.RetrieveUpdateDestroyAPIView):

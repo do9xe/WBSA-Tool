@@ -19,7 +19,7 @@ class StreetSerializer(serializers.ModelSerializer):
 class TimeslotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Timeslot
-        fields = ['id', 'date', 'time_from', 'time_to', 'appointment_max', 'appointment_count', 'is_full']
+        fields = ['id', 'date', 'time_from', 'time_to', 'appointment_max']
 
 
 class TimeslotCountSerializer(serializers.BaseSerializer):
