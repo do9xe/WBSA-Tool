@@ -54,7 +54,9 @@ class Timeslot(models.Model):
         return f"{self.date}_{self.time_from}_{self.time_to}"
 
     def get_count_per_area(self, area_id):
-        count = Appointment.objects.filter(timeslot=self, street__area__parent_id=area_id).count()
+        qs = Appointment.objects.filter(timeslot=self, street__area__parent_id=area_id, area__isnull=True)
+        overwrites = Appointment.objects.filter(timeslot=self, area_id=area_id)
+        count = (qs | overwrites).count()
         return count
 
     def get_percentage_per_area(self, area_id):
@@ -72,6 +74,10 @@ class Timeslot(models.Model):
 
 class Appointment(models.Model):
     is_collected = models.BooleanField(default=False)
+    area = models.ForeignKey('Area',
+                             default=None,
+                             on_delete=models.SET_NULL,
+                             null=True)
     contact_name = models.CharField(max_length=200)
     street = models.ForeignKey('Street',
                                on_delete=models.CASCADE,

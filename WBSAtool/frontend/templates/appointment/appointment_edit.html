@@ -87,6 +87,17 @@
                         </select>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <label for="timeslot" class="col-sm-3 col-form-label text-lg-end">Fahrzeug überschreiben</label>
+                    <div class="col">
+                        <select class="form-select" name="area" id="area">
+                            <option value="None">--- kein Overwrite ---</option>
+                            {% for area in area_list %}
+                                <option value="{{ area.id }}">{{ area.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
                 <div class="text-end my-3">
                         <button type="submit" name="update" class="btn btn-primary">Speichern</button>
                         {% if appointment %}

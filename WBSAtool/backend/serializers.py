@@ -45,4 +45,4 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id', 'is_collected', 'contact_name', 'street', 'house_number', 'timeslot', 'text', 'phone', 'email', 'lat', 'lon']
+        fields = ['id', 'is_collected', 'area', 'contact_name', 'street', 'house_number', 'timeslot', 'text', 'phone', 'email', 'lat', 'lon']

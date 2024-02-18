@@ -1,8 +1,8 @@
-from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import FormView
 from django.urls import reverse
 from django.utils.html import urlencode
+from itertools import chain
 from ..forms import CollectMenuForm
 from backend.models import Appointment
 
@@ -27,7 +27,8 @@ class CollectList(ListView):
         qs = self.model.objects.all()
         if "area" in self.request.GET:
             area = int(self.request.GET['area'])
-            qs = qs.filter(street__area__parent_id=area)
+            overwrites = self.model.objects.filter(area_id=area)
+            qs = qs.filter(street__area__parent_id=area, area__isnull=True) | overwrites
         if "timeslot" in self.request.GET:
             timeslot = int(self.request.GET['timeslot'])
             qs = qs.filter(timeslot_id=timeslot)

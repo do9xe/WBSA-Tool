@@ -3,12 +3,15 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 </div>
 <div class="modal-body">
+    {% if appointment.area %}<span class="badge bg-primary my-2">Fahrzeug überschrieben</span>{% endif %}
     <ul class="list-group w-100">
+        <li class="list-group-item list-group-item-action">
         {% if appointment.is_collected %}
-            <li class="list-group-item list-group-item-action">Abgeholt: Ja</li>
+            Abgeholt: Ja
         {% else %}
-            <li class="list-group-item list-group-item-action">Abgeholt: Nein</li>
+            Abgeholt: Nein
         {% endif %}
+        </li>
         <li class="list-group-item list-group-item-action">Name: {{appointment.contact_name}}</li>
         <li class="list-group-item list-group-item-action">
             Adresse: <a href="http://www.google.com/maps/place/{{ appointment.lat }},{{ appointment.lon }}">{{appointment.street}} {{appointment.house_number}}</a>

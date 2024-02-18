@@ -61,7 +61,7 @@ class singleTimeslotCount(APIView):
 class AppointmentList(generics.ListCreateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    filterset_fields = ['id', 'is_collected', 'contact_name', 'street', 'house_number', 'timeslot', 'text', 'phone', 'email']
+    filterset_fields = ['id', 'is_collected', 'area', 'contact_name', 'street', 'house_number', 'timeslot', 'text', 'phone', 'email']
 
 
 class AppointmentDetail(generics.RetrieveUpdateDestroyAPIView):

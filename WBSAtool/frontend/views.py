@@ -126,6 +126,7 @@ def appointment_edit(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     if request.method == 'GET':
         StreetList = Street.objects.order_by("name")
+        AreaList = Area.objects.filter(is_parent=True)
         if (appointment.street.area) and (appointment.street.area.parent) :
             TimeslotList = Area.objects.get(id=appointment.street.area.parent.id).get_timeslots()
         else:
@@ -133,7 +134,7 @@ def appointment_edit(request, appointment_id):
                             "appointment_max":appointment.timeslot.appointment_max,
                             "count":"X",
                             "percentage":"X%"}]
-        context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList, 'NOMINATIM_URL': NOMINATIM_URL}
+        context = {"appointment": appointment, "street_list": StreetList, 'timeslot_list': TimeslotList, 'area_list': AreaList, 'NOMINATIM_URL': NOMINATIM_URL}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
         appointment.contact_name = request.POST['name']
@@ -143,6 +144,7 @@ def appointment_edit(request, appointment_id):
         appointment.text = request.POST['text']
         appointment.phone = request.POST['phone']
         appointment.email = request.POST['email']
+        appointment.area = Area.objects.get(id=request.POST['area'])
         appointment.save()
         return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
@@ -151,7 +153,8 @@ def appointment_edit(request, appointment_id):
 def appointment_new(request):
     if request.method == 'GET':
         StreetList = Street.objects.order_by("name")
-        context = {"street_list": StreetList, 'NOMINATIM_URL': NOMINATIM_URL}
+        AreaList = Area.objects.filter(is_parent=True)
+        context = {"street_list": StreetList, "area_list": AreaList, 'NOMINATIM_URL': NOMINATIM_URL}
         return render(request, 'appointment/appointment_edit.html', context)
     if request.method == "POST":
         contact_name = request.POST['name']
@@ -161,6 +164,7 @@ def appointment_new(request):
         text = request.POST['text']
         phone = request.POST['phone']
         email = request.POST['email']
+        area = request.POST['area']
         newAppointment = Appointment(contact_name=contact_name, street=street, house_number=house_number, timeslot=timeslot)
         if text:
             newAppointment.text = text
@@ -168,6 +172,8 @@ def appointment_new(request):
             newAppointment.phone = phone
         if email:
             newAppointment.email = email
+        if area:
+            newAppointment.area = Area.objects.get(id=area)
         newAppointment.save()
         return HttpResponseRedirect(reverse('frontend:appointment_map'))
 
@@ -220,7 +226,8 @@ def generate_pdf(request):
 
     for vehicle in vehicle_list.all():
         for timeslot in timeslot_list:
-            appointment_list = Appointment.objects.filter(timeslot=timeslot, street__area__parent=vehicle).order_by("street")
+            appointment_list = Appointment.objects.filter(timeslot=timeslot, street__area__parent=vehicle, area__isnull=True)
+            appointment_list = (appointment_list | Appointment.objects.filter(timeslot=timeslot, area=vehicle)).order_by("street")
             if appointment_list.count() == 0:
                 continue
             report.write_heading(f"Fahzeug: {vehicle.name}", 2)

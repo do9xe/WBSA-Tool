@@ -20,6 +20,8 @@ Sollte es bereits Abholungen in derselben Straße geben werden Vorschläge für 
 
 ![Screenshot der Zeitraum-Vorschläge](screenshots/timeslot_suggestion.png)
 
+Nach Eingabe der vollständigen Adresse wird ein gelber Marker auf der Karte gesetzt. So ist es möglich die Abholungen in der Nähe zu der neuen Abholung zu sehen um den besten Zeitraum auswählen zu können.
+
 Die Sammlung
 ------------
 Während der Sammlung ist es möglich die Abholungen in einer Liste nach Zeitraum zu filtern und als abgeholt zu markieren:
@@ -51,3 +53,4 @@ Die Abholungszeiträume haben ein Datum, eine Start- und Endzeit. Zusätzlich gi
 <h3>Abholungen</h3>
 Die Abholungen enthalten alle relevanten Daten, damit ein Baum abgeholt werden kann. Zusätzlich ist es möglich eine Abholung als "abgeholt" zu markieren.
 Beim Speichern der Abholung wird die Adresse der mittels der Nominatim-API von OpenStreetMap in GPS-Koordinaten umgewandelt und ebenfalls gespeichert. Diese Koordinaten werden von der Übersichtskarte verwendet.
+Es ist möglich ein Fahrzeug direkt an ein Fahrzeug zu binden. Diese Funktion ist für einen Ausgleich der Abholungen der verschiedenen Fahrzeige gedacht. In der Praxis sind die Fahrzeuge im selben Zeitraum oft nicht gleichmäßig ausgelastet und so können einzelne Abholungen an ein anderes Fahrzeug mit einer niedrigen Auslastung disponiert werden.
