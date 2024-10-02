@@ -144,7 +144,10 @@ def appointment_edit(request, appointment_id):
         appointment.text = request.POST['text']
         appointment.phone = request.POST['phone']
         appointment.email = request.POST['email']
-        appointment.area = Area.objects.get(id=request.POST['area'])
+        if request.POST['area'] != "None":
+            appointment.area = Area.objects.get(id=request.POST['area'])
+        else:
+            appointment.area = None
         appointment.save()
         return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
