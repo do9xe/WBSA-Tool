@@ -92,9 +92,9 @@ def timeslot_suggestion(request):
     TimeslotList = Timeslot.objects.all()
     SuggestionList = []
     for Slot in TimeslotList:
-        if Slot.is_full:
-            continue
         count = Appointment.objects.filter(timeslot=Slot, street=street).count()
+        if Slot.appointment_max == count:
+            continue
         if count != 0:
             suggestion = {"timeslot": Slot, "count": count}
             SuggestionList.append(suggestion)
