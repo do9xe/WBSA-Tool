@@ -175,7 +175,7 @@ def appointment_new(request):
             newAppointment.phone = phone
         if email:
             newAppointment.email = email
-        if area:
+        if area != "None":
             newAppointment.area = Area.objects.get(id=area)
         newAppointment.save()
         return HttpResponseRedirect(reverse('frontend:appointment_map'))
