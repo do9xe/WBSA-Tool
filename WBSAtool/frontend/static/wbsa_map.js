@@ -22,9 +22,12 @@ function hideNewAppMarker() {
 async function updateMarker() {
     var street = document.getElementById("street").value;
     var house_number = document.getElementById("house_number").value;
-    if (street === "" || house_number === "") {
+    if (street === "") {
         hideNewAppMarker();
         return
+    }
+    if (house_number === "") {
+        house_number = 0;
     }
     params = {
         "street": street +" "+house_number,

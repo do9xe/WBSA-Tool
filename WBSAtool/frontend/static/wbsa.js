@@ -47,6 +47,7 @@ function autocomplete(inp, arr) {
               (or any other open lists of autocompleted values:*/
               closeAllLists();
               updateMarker();
+              document.getElementById("house_number").focus();
               loadTimeslotsForStreet(selection);
               getTimeslotSuggestions(selection);
           });
