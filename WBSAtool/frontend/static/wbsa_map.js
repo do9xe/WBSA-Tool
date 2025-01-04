@@ -59,7 +59,7 @@ function createMarker(appointment) {
     var color = stringToColor(getTimeslotName(appointment.timeslot))
     var marker = new L.Marker([appointment.lat,appointment.lon])
     .bindPopup('<div>'
-        + appointment.contact_name
+        + '<a href="/appointment/list?id='+ appointment.id +'">' + appointment.contact_name + '</a>'
         +'<br>'+ appointment.street.name + ' ' + appointment.house_number
         +'<br>' + getTimeslotName(appointment.timeslot) +
         '</div>',popupOption).openPopup();

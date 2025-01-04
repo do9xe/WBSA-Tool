@@ -72,3 +72,14 @@
 Keine Abholungen angelegt!
 {% endif %}
 {% endblock data %}
+{%  block jsfooter %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const appointmentID = params.get("id");
+    if (!isNaN(appointmentID) && appointmentID != null && appointmentID != "") {
+        showAppointmentDetails(appointmentID);
+    }
+});
+</script>
+{% endblock %}
