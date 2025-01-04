@@ -23,6 +23,11 @@
     </ul>
 </div>
     <div class="modal-footer">
+    {% if perms.backend.add_appointment %}
+        <a class="btn btn-warning" href="{% url 'frontend:appointment_edit' appointment.id %}" type="button">
+            <i class="bi bi-pencil-square"></i> Bearbeiten
+        </a>
+    {% endif %}
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="ModalCloseButton">Cancel</button>
         {% if appointment.is_collected %}
             <button type="button" class="btn btn-warning" onclick="markCollected(this, {{ appointment.id }})" value="false" id="MarkCollectedButton">Abholung offen</button>
