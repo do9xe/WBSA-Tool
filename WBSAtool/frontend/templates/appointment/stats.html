@@ -73,8 +73,24 @@
         clearedAppointmentData = clearedAppointmentData.filter(appointment => appointment.street.area.parent != null);
 
         parentAreaData.forEach(area =>{
-            var collectedCount = clearedAppointmentData.filter(appointment => (appointment.street.area.parent === area.id && appointment.is_collected === true)).length;
-            var notCollectedCount = clearedAppointmentData.filter(appointment => (appointment.street.area.parent === area.id && appointment.is_collected === false)).length;
+            var collectedCount = 0
+            clearedAppointmentData.filter(appointment => appointment.is_collected === true).forEach(appointment => {
+                if (appointment.area === area.id) {
+                    collectedCount += 1;
+                }
+                if (appointment.area === null && appointment.street.area.parent == area.id) {
+                    collectedCount += 1;
+                }
+            });
+            var notCollectedCount = 0;
+            clearedAppointmentData.filter(appointment => appointment.is_collected === false).forEach(appointment => {
+                if (appointment.area === area.id) {
+                    notCollectedCount += 1;
+                }
+                if (appointment.area === null && appointment.street.area.parent == area.id) {
+                    notCollectedCount += 1;
+                }
+            });
             collectStatusByParent.push([area.name, collectedCount, collectedColor, notCollectedCount, notCollectedColor]);
         });
         var data = google.visualization.arrayToDataTable(collectStatusByParent);
