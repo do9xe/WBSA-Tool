@@ -118,6 +118,7 @@
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
 <link rel="stylesheet" href="/static/leaflet.extra-markers.min.css">
+<script src="{% static 'wbsa_map.js' %}"></script>
 {% endblock head %}
 
 {% block jsfooter %}
@@ -129,5 +130,7 @@
 
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script src="/static/leaflet.extra-markers.js"></script>
-<script src="{% static 'wbsa_map.js' %}"></script>
+<script>
+loadAppointmentMap();
+</script>
 {% endblock jsfooter%}

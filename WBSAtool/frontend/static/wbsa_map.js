@@ -55,8 +55,14 @@ async function getAppointments() {
     return response.json();
 }
 
-function createMarker(appointment) {
-    var color = stringToColor(getTimeslotName(appointment.timeslot))
+/*****************
+ Valid values for usecases are: "generic", "appointment",
+******************/
+function createMarker(appointment, usecase) {
+    const popupOption = {
+        "closeButton":false
+    }
+
     var marker = new L.Marker([appointment.lat,appointment.lon])
     .bindPopup('<div>'
         + '<a href="/appointment/list?id='+ appointment.id +'">' + appointment.contact_name + '</a>'
@@ -64,6 +70,10 @@ function createMarker(appointment) {
         +'<br>' + getTimeslotName(appointment.timeslot) +
         '</div>',popupOption).openPopup();
     if (L.ExtraMarkers !== undefined) {
+    if (usecase !== "generic") {
+        if (usecase === "appointment") {
+            var color = stringToColor(getTimeslotName(appointment.timeslot))
+        }
         var markerIcon = L.ExtraMarkers.icon({
                 icon: "true",
                 svg: true,
@@ -73,64 +83,86 @@ function createMarker(appointment) {
     }
     return marker;
 }
-/***********************************************************
-* Section where we create the actual Map and center it     *
-***********************************************************/
-// Creating map options
-var mapOptions = {
-    center: [48.99707935, 8.47255828438081],
-    zoom: 15
-}
-// Creating a map object
-var map = new L.map('map', mapOptions);
 
-// Creating a Layer object
-var backgroundMap = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-// Adding layer to the map
-map.addLayer(backgroundMap);
+function loadMapBasics() {
+    /***********************************************************
+    * Section where we create the actual Map and center it     *
+    ***********************************************************/
+    // Creating map options
+    var mapOptions = {
+        center: [48.99707935, 8.47255828438081],
+        zoom: 15
+    }
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
 
-/***********************************************************
-* Section where we add all the markers to layer-groups     *
-***********************************************************/
-
-const popupOption = {
-    "closeButton":false
+    // Creating a Layer object
+    var backgroundMap = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    // Adding layer to the map
+    map.addLayer(backgroundMap);
+    return map;
 }
 
-Promise.all([getAreas(), getTimeslots(), getAppointments()]).then(results =>{
-    var bounds = [];
-    var timeslotList = results[1];
-    var appointmentList = results[2];
-    var layerControl = L.control.layers(null, null, {collapsed:false}).addTo(map);
-
-    timeslotList.forEach(timeslot => {
-        var markers = new L.markerClusterGroup({disableClusteringAtZoom: 1,});
-        appointmentList.forEach(appointment => {
-            if (appointment.timeslot.id === timeslot.id) {
-                var marker = createMarker(appointment);
-                bounds.push([appointment.lat, appointment.lon]);
-                markers.addLayer(marker);
-            }
+function loadGenericMap() {
+    var map = loadMapBasics();
+    Promise.all([getTimeslots(), getAppointments()]).then(results =>{
+        var bounds = [];
+        var timeslotList = results[0];
+        var appointmentList = results[1];
+        var layerControl = L.control.layers(null, null, {collapsed:false}).addTo(map);
+        timeslotList.forEach(timeslot => {
+            var markers = new L.markerClusterGroup({disableClusteringAtZoom: 1,});
+            appointmentList.forEach(appointment => {
+                if (appointment.timeslot.id === timeslot.id) {
+                    var marker = createMarker(appointment, "generic");
+                    bounds.push([appointment.lat, appointment.lon]);
+                    markers.addLayer(marker);
+                }
+            });
+            layerControl.addOverlay(markers, getTimeslotName(timeslot));
+            map.addLayer(markers);
         });
-        layerControl.addOverlay(markers, getTimeslotName(timeslot));
-        map.addLayer(markers);
+        map.fitBounds(new L.LatLngBounds(bounds));
     });
-    map.fitBounds(new L.LatLngBounds(bounds));
-});
-if (L.ExtraMarkers !== undefined) {
+}
+
+function loadAppointmentMap() {
+    globalThis.map = loadMapBasics();
+
+    Promise.all([getTimeslots(), getAppointments()]).then(results =>{
+        var bounds = [];
+        var timeslotList = results[0];
+        var appointmentList = results[1];
+        var layerControl = L.control.layers(null, null, {collapsed:false}).addTo(map);
+        timeslotList.forEach(timeslot => {
+            var markers = new L.markerClusterGroup({disableClusteringAtZoom: 1,});
+            appointmentList.forEach(appointment => {
+                if (appointment.timeslot.id === timeslot.id) {
+                    var marker = createMarker(appointment, "appointment");
+                    bounds.push([appointment.lat, appointment.lon]);
+                    markers.addLayer(marker);
+                }
+            });
+            layerControl.addOverlay(markers, getTimeslotName(timeslot));
+            map.addLayer(markers);
+        });
+        map.fitBounds(new L.LatLngBounds(bounds));
+    });
+
     var newMarkerIcon = L.ExtraMarkers.icon({
         icon: "true",
         svg: true,
         markerColor: "#ffeb00"
     })
 
-    var newAppMarker = new L.Marker(["0", "0"], {icon: newMarkerIcon}).addTo(map);
-    var typingTimer;
+    globalThis.newAppMarker = new L.Marker(["0", "0"], {icon: newMarkerIcon}).addTo(map);
+    globalThis.typingTimer = null;
+
     document.addEventListener('DOMContentLoaded', () => {
         var house_number = document.getElementById("house_number");
         house_number.addEventListener("focusout", function (e) {
             clearTimeout(typingTimer);
-            typingTimer = setTimeout(updateMarker, 500);
+            globalThis.typingTimer = setTimeout(updateMarker, 500);
         });
         house_number.addEventListener("focus", function (e) {
             clearTimeout(typingTimer);

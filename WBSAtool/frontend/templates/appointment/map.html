@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block head %}
+{% load static %}
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
+<script src="{% static 'wbsa_map.js' %}"></script>
 {% endblock head %}
 
 {% block jsfooter %}
@@ -14,8 +16,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
 
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-{% load static %}
-<script src="{% static 'wbsa_map.js' %}"></script>
+<script>
+loadGenericMap();
+</script>
 {% endblock jsfooter%}
 
 {% block data %}
