@@ -32,3 +32,13 @@
   background-color: DodgerBlue !important;
   color: #ffffff;
 }
+
+.animate {
+  animation-name: test;
+  animation-duration: 2s;
+}
+
+@keyframes test {
+      from {background-color: white;}
+      to {background-color: red;}
+}

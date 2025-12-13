@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block titel %}Termin zur Abholung{% endblock titel %}
+
+{% block container %}
+<div class="d-flex" style="height: 90vh">
+    <div class="p-3 w-50">
+        <div id="map" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <div class="d-flex flex-column bg-body-tertiary my-3" style="width: 380px">
+        <a class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">Abholungen</span>
+        </a>
+        <div class="list-group list-group-flush border-bottom overflow-auto h-100" id="original" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+        {% for appointment in appointment_list %}
+            <a class="list-group-item list-group-item-action py-3 lh-sm bg-secondary" draggable="true" ondragstart="dragstartHandler(event)" id="ap_{{ appointment.id }}">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                    <strong class="mb-1">{{ appointment.street }} {{ appointment.house_number }}</strong>
+                    <small>{{ appointment.street.area.parent }}</small>
+                </div>
+                <div class="col-10 mb-1 small">{{ appointment.timeslot }}<br>{{ appointment.contact_name }}</div>
+            </a>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="d-flex flex-column bg-body-tertiary my-3 mx-3 h-100" style="width: 380px" name="FahrzeugListe">
+        {% for area in area_list %}
+        <a class="d-flex align-items-center flex-shrink-0 p-2 link-body-emphasis text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">{{ area.name }}</span>
+        </a>
+        <div class="list-group list-group-flush border-bottom overflow-auto h-100" id="area_{{ area.id }}" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+        </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex flex-column bg-body-tertiary my-3 mx-3 h-100" style="width: 380px">
+    <a class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom">
+        <span class="fs-5 fw-semibold">Zeitslots</span>
+    </a>
+        {% for timeslot in timeslot_list %}
+        <b>{{timeslot.date}}, {{timeslot.time_from|date:"H:i"}}-{{timeslot.time_to|date:"H:i"}}<br></b>
+        {% with timeslot.get_all_percentage as p_list %}
+            {% for p_entry in p_list %}
+                {{ p_entry.name }}<br>
+                <div class="progress" role="progressbar">
+                    <div class="progress-bar progress-bar-striped overflow-visible bg-success text-dark"
+                        id="ts_{{ timeslot.id }}+area_{{ p_entry.id }}"
+                        style="width: 0%">
+                        </div>
+                </div>
+           {% endfor %}
+        {% endwith %}
+        <br>
+        {% endfor %}
+    <a class="btn btn-primary my-5" onclick="submitOverwriteData()">Speichern</a>
+    </div>
+</div>
+<script>
+let dispoOverwriteData = {};
+let csrf_token = "{{ csrf_token }}";
+</script>
+{% endblock container %}
+{% load static %}
+{% block head %}
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+<link rel="stylesheet" href="/static/leaflet.extra-markers.min.css">
+<script src="{% static 'wbsa_map.js' %}"></script>
+{% endblock head %}
+
+{% block jsfooter %}
+ <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+<script src="/static/leaflet.extra-markers.js"></script>
+<script>
+loadDispoMap();
+</script>
+{% endblock jsfooter%}

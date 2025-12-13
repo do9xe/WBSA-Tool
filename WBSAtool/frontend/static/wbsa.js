@@ -227,3 +227,123 @@ function acceptSuggestion(timeslot_id) {
         }
     }
 }
+
+// die progressbars anhand von ihren IDs befüllen
+async function fillTimeslotBars(tsList) {
+    globalThis.tsStatusBarList = {}
+    for (const ts of tsList) {
+        let tsCount = await (await fetch(`/api/timeslot/${ts.id}/count`)).json();
+        tsCount.forEach(tsc => {
+            const barID = `ts_${tsc.timeslot.id}+area_${tsc.area.id}`;
+            const thisProgressBar = document.getElementById(barID);
+            tsStatusBarList[barID] = tsc;
+            thisProgressBar.style.width = String(tsc.percentage)+"%";
+            thisProgressBar.innerHTML = `${tsc.count}/${tsc.appointment_max}`
+        })
+    }
+}
+
+function updateStatusBars(source, destination) {
+    let tsc_src = tsStatusBarList[source];
+    tsc_src['count'] = tsc_src['count'] - 1;
+    tsc_src.percentage = 100 / tsc_src.appointment_max * tsc_src.count;
+    tsStatusBarList[source] = tsc_src;
+    document.getElementById(source).style.width = String(tsc_src.percentage)+"%";
+    document.getElementById(source).innerHTML = `${tsc_src.count}/${tsc_src.appointment_max}`;
+
+    let tsc_dst = tsStatusBarList[destination];
+    tsc_dst['count'] = tsc_dst['count'] + 1;
+    tsc_dst.percentage = 100 / tsc_dst.appointment_max * tsc_dst.count;
+    tsStatusBarList[destination] = tsc_dst;
+    document.getElementById(destination).style.width = String(tsc_dst.percentage)+"%";
+    document.getElementById(destination).innerHTML = `${tsc_dst.count}/${tsc_dst.appointment_max}`;
+}
+function updateDispoMarker(id, target) {
+    let area = areaList.filter(e=>("area_"+e.id)===target)[0];
+    if (area === undefined) {
+        const name = document.getElementById(id).children[0].children[1].innerHTML;
+        if (name === "") {
+            area = {"name":"dispo"};
+        } else {
+            area = {"name": name};
+        }
+    }
+    const markerIcon = L.ExtraMarkers.icon({
+                icon: "true",
+                svg: true,
+                markerColor: stringToColor(area.name)
+        });
+    allMarkers[id].setIcon(markerIcon);
+}
+function updateOverwriteData(id, target) {
+    //es wird in dem Objekt mit den ausstehenden Anpassungen geschaut, ob die Abholung vorhanden ist
+    let src_area = "original";
+    for (const [key, value] of Object.entries(dispoOverwriteData)) {
+        if (value.includes(id)) {
+            //wenn die Abholung vorhanden ist, dann wird sie aus der Liste entfernt
+            src_area = key;
+            dispoOverwriteData[key] = value.filter(e=>e!==id);
+        }
+    }
+    //wenn das Ziel die Stammliste ist müssen wir nichts machen, da die Abholung nicht bearbeitet wird.
+    if (target === "original") {
+        return src_area;
+    }
+    //wenn das Ziel eins der Fahrzeuge ist muss die Abholung in dem Objekt zum überschreiben hinterlegt werden.
+    if (target in dispoOverwriteData) {
+        dispoOverwriteData[target].push(id);
+    } else {
+        dispoOverwriteData[target] = [id];
+    }
+    return src_area;
+}
+
+function updatePage(id, target) {
+    //Farbe des Markers verändern
+    updateDispoMarker(id, target);
+    //das Objekt mit Overwrites anpassen
+    let src_area = updateOverwriteData(id, target);
+
+    //daten für die Anpassung der Balken sammeln
+    const db_id = id.split("_")[1];
+    thisAppointment = appointmentList.filter(e=>e.id==db_id)[0];
+    if (src_area === "original") {
+        src_area = `area_${thisAppointment.street.area.parent}`;
+    }
+    if (target === "original") {
+        target = `area_${thisAppointment.street.area.parent}`;
+    }
+    const src_bar = `ts_${thisAppointment.timeslot.id}+${src_area}`;
+    const dst_bar = `ts_${thisAppointment.timeslot.id}+${target}`;
+    updateStatusBars(src_bar, dst_bar);
+}
+
+async function submitOverwriteData() {
+    const options = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded',
+            credentials: 'same-origin',
+            'X-CSRFToken': csrf_token,
+        },
+        body: "data="+JSON.stringify(dispoOverwriteData)}
+    await fetch("/appointment/dispo", options)
+    window.location = "/appointment/list"
+}
+
+function dragstartHandler(e) {
+    e.dataTransfer.setData("text/plain", e.target.id);
+    let img = new Image();
+    img.src = "/static/img/fire-truck.png";
+    e.dataTransfer.setDragImage(img, 10, 10);
+}
+function dragoverHandler(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+}
+function dropHandler(e) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("text/plain");
+    updatePage(data, e.currentTarget.id);
+    e.currentTarget.appendChild(document.getElementById(data));
+}

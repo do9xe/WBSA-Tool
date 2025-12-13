@@ -49,13 +49,16 @@ class TimeslotCount(APIView):
 
 class singleTimeslotCount(APIView):
     def get(self, request, pk):
+        timeslot = get_object_or_404(Timeslot, id=pk)
         if "area" in request.GET:
             area = get_object_or_404(Area, id=request.GET['area'])
-            timeslot = get_object_or_404(Timeslot, id=pk)
             data = TimeslotCountSerializer(timeslot, area=area).data
-            return Response(data=data, status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            area_list = Area.objects.filter(is_parent=True)
+            data = []
+            for area in area_list:
+                data.append(TimeslotCountSerializer(timeslot, area=area).data)
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class AppointmentList(generics.ListCreateAPIView):

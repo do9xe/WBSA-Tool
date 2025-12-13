@@ -54,9 +54,18 @@ async function getAppointments() {
     var response = await fetch("/api/appointment");
     return response.json();
 }
+function scrollToAppointment(id) {
+    document.getElementById(id).scrollIntoView({behavior:'smooth'});
+    document.getElementById(id).classList.remove("bg-secondary");
+    document.getElementById(id).classList.add("bg-warning");
+    setTimeout(() => {
+        document.getElementById(id).classList.remove("bg-warning");
+        document.getElementById(id).classList.add("bg-secondary");
+    }, 1500)
+}
 
 /*****************
- Valid values for usecases are: "generic", "appointment",
+ Valid values for usecases are: "generic", "appointment", "dispo"
 ******************/
 function createMarker(appointment, usecase) {
     const popupOption = {
@@ -69,10 +78,23 @@ function createMarker(appointment, usecase) {
         +'<br>'+ appointment.street.name + ' ' + appointment.house_number
         +'<br>' + getTimeslotName(appointment.timeslot) +
         '</div>',popupOption).openPopup();
-    if (L.ExtraMarkers !== undefined) {
     if (usecase !== "generic") {
         if (usecase === "appointment") {
-            var color = stringToColor(getTimeslotName(appointment.timeslot))
+            var color = stringToColor(getTimeslotName(appointment.timeslot));
+        }
+        if (usecase === "dispo") {
+            var name = "dispo";
+            areaList.forEach(area => {
+                try {
+                    if (area.id === appointment.area || (area.id === appointment.street.area.parent && appointment.area === null)) {
+                        name = area.name;
+                    }
+                } catch (e){}
+            });
+            var color = stringToColor(name);
+            marker.addEventListener("click", () => {
+                scrollToAppointment("ap_" + appointment.id);
+            });
         }
         var markerIcon = L.ExtraMarkers.icon({
                 icon: "true",
@@ -129,11 +151,11 @@ function loadGenericMap() {
 function loadAppointmentMap() {
     globalThis.map = loadMapBasics();
 
-    Promise.all([getTimeslots(), getAppointments()]).then(results =>{
+    Promise.all([getTimeslots(), getAppointments()]).then(results => {
         var bounds = [];
         var timeslotList = results[0];
         var appointmentList = results[1];
-        var layerControl = L.control.layers(null, null, {collapsed:false}).addTo(map);
+        var layerControl = L.control.layers(null, null, {collapsed: false}).addTo(map);
         timeslotList.forEach(timeslot => {
             var markers = new L.markerClusterGroup({disableClusteringAtZoom: 1,});
             appointmentList.forEach(appointment => {
@@ -167,5 +189,33 @@ function loadAppointmentMap() {
         house_number.addEventListener("focus", function (e) {
             clearTimeout(typingTimer);
         });
+    });
+}
+
+function loadDispoMap() {
+    var map = loadMapBasics();
+    Promise.all([getTimeslots(), getAppointments(), getAreas()]).then(results => {
+        var bounds = [];
+        globalThis.allMarkers = {};
+        globalThis.timeslotList = results[0];
+        globalThis.appointmentList = results[1];
+        globalThis.areaList = results[2];
+        var layerControl = L.control.layers(null, null, {collapsed: false}).addTo(map);
+
+        timeslotList.forEach(timeslot => {
+            var markers = new L.markerClusterGroup({disableClusteringAtZoom: 1,});
+            appointmentList.forEach(appointment => {
+                if (appointment.timeslot.id === timeslot.id) {
+                    var marker = createMarker(appointment, "dispo");
+                    allMarkers["ap_" + String(appointment.id)] = marker;
+                    bounds.push([appointment.lat, appointment.lon]);
+                    markers.addLayer(marker);
+                }
+            });
+            layerControl.addOverlay(markers, getTimeslotName(timeslot));
+            map.addLayer(markers);
+        });
+        map.fitBounds(new L.LatLngBounds(bounds));
+        fillTimeslotBars(timeslotList);
     });
 }

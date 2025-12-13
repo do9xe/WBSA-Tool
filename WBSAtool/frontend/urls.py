@@ -4,7 +4,7 @@ from . import views, auth_views
 from .view_collection.area import AreaListView, AreaCreateView, AreaUpdateView
 from .view_collection.street import StreetListView, StreetCreateView, StreetUpdateView, StreetBulkUpdateView
 from .view_collection.timeslot import TimeslotListView, TimeslotCreateView, TimeslotUpdateView
-from .view_collection.appointment import AppointmentListView, UpdateAppointmentCollected, AppointmentMapView, AppointmentStatsView
+from .view_collection.appointment import AppointmentListView, AppointmentDispoView, UpdateAppointmentCollected, AppointmentMapView, AppointmentStatsView
 from .view_collection.collect import CollectMenu, CollectList
 
 app_name = 'frontend'
@@ -28,6 +28,7 @@ urlpatterns = [
     path('timeslot/<int:pk>/edit', TimeslotUpdateView.as_view(), name='timeslot_edit'),
     path('timeslot/suggestion', views.timeslot_suggestion, name='timeslot_suggestion'),
     path('appointment/list', AppointmentListView.as_view(), name='appointment_list'),
+    path('appointment/dispo', AppointmentDispoView.as_view(), name='appointment_dispo'),
     path('appointment/pdf', views.generate_pdf, name='appointment_pdf'),
     path('appointment/delete', views.appointment_delete, name='appointment_delete'),
     path('appointment/map', AppointmentMapView.as_view(), name='appointment_map'),

@@ -54,6 +54,7 @@
     {% endfor %}
     </tbody>
 </table>
+    <a href="{% url 'frontend:appointment_dispo' %}" type="button" class="btn btn-sm btn-primary"><i class="bi bi-arrow-left-right"></i> Dispo-Ansicht</a>
     <a href="{% url 'frontend:timeslot_new' %}" type="button" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Neuer Abholungszeitraum</a>
     <a href="#deleteConfirm" class="btn btn-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i> Ausgewählte Löschen</a>
 
