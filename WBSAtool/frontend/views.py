@@ -104,12 +104,16 @@ def timeslot_suggestion(request):
     return render(request, "timeslot/timeslot_suggestion.html", context)
 
 
-@permission_required("backend.delete_appointment", raise_exception=True)
-def appointment_delete(request):
+@permission_required(["backend.delete_appointment","backend.change_appointment"], raise_exception=True)
+def appointment_bulk(request):
     if request.method == "POST":
         if request.POST['action'] == "delete":
             for id in request.POST.getlist('select_row'):
                 Appointment.objects.get(id=int(id)).delete()
+            return HttpResponseRedirect(reverse('frontend:appointment_list'))
+        if request.POST['action'] == "clearOverwrite":
+            for id in request.POST.getlist('select_row'):
+                Appointment.objects.filter(id=int(id)).update(area=None)
             return HttpResponseRedirect(reverse('frontend:appointment_list'))
 
 
@@ -180,6 +184,10 @@ def appointment_new(request):
         newAppointment.save()
         return HttpResponseRedirect(reverse('frontend:appointment_map'))
 
+@permission_required("backend.change_appointment", raise_exception=True)
+def appointment_overwrite_remove(request, appointment_id):
+    Appointment.objects.filter(id=int(appointment_id)).update(area=None)
+    return HttpResponse("ok")
 
 @permission_required("backend.add_street", raise_exception=True)
 def street_osm_import(request):

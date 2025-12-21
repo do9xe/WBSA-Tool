@@ -347,3 +347,9 @@ function dropHandler(e) {
     updatePage(data, e.currentTarget.id);
     e.currentTarget.appendChild(document.getElementById(data));
 }
+
+async function clearOverwrite(id) {
+    var badge = document.getElementById("badge_"+String(id));
+    badge.outerHTML = "";
+    await fetch("/appointment/"+String(id)+"/clearOverwrite")
+}
