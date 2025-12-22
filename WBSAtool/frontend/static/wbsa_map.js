@@ -78,31 +78,36 @@ function createMarker(appointment, usecase) {
         +'<br>'+ appointment.street.name + ' ' + appointment.house_number
         +'<br>' + getTimeslotName(appointment.timeslot) +
         '</div>',popupOption).openPopup();
-    if (usecase !== "generic") {
-        if (usecase === "appointment") {
-            var color = stringToColor(getTimeslotName(appointment.timeslot));
+    if (usecase === "generic") {
+        if (appointment.is_collected) {
+            var color = "#146c43";
+        } else {
+            var color = "#b02a37";
         }
-        if (usecase === "dispo") {
-            var name = "dispo";
-            areaList.forEach(area => {
-                try {
-                    if (area.id === appointment.area || (area.id === appointment.street.area.parent && appointment.area === null)) {
-                        name = area.name;
-                    }
-                } catch (e){}
-            });
-            var color = stringToColor(name);
-            marker.addEventListener("click", () => {
-                scrollToAppointment("ap_" + appointment.id);
-            });
-        }
-        var markerIcon = L.ExtraMarkers.icon({
-                icon: "true",
-                svg: true,
-                markerColor: color
-        });
-        marker.setIcon(markerIcon);
     }
+    if (usecase === "appointment") {
+        var color = stringToColor(getTimeslotName(appointment.timeslot));
+    }
+    if (usecase === "dispo") {
+        var name = "dispo";
+        areaList.forEach(area => {
+            try {
+                if (area.id === appointment.area || (area.id === appointment.street.area.parent && appointment.area === null)) {
+                    name = area.name;
+                }
+            } catch (e){}
+        });
+        var color = stringToColor(name);
+        marker.addEventListener("click", () => {
+            scrollToAppointment("ap_" + appointment.id);
+        });
+    }
+    var markerIcon = L.ExtraMarkers.icon({
+        icon: "true",
+        svg: true,
+        markerColor: color
+    });
+    marker.setIcon(markerIcon);
     return marker;
 }
 

@@ -102,6 +102,13 @@
 
 {% block data %}
     <div class="container">
+    <div class="row my-3 justify-content-center">
+        <div class="col-4 h3 text-center">Abholungen gesamt: {{ appointment_total }}</div>
+        <div class="col-4 h3 text-center">Abholungen gesammelt: {{ appointment_collected }}</div>
+        <div class="col-4 h3 text-center">Abholungen offen: {{ appointment_pending }}</div>
+        <div class="col-4 h3 text-center">Abholungen per Mail: {{ appointment_email }}</div>
+        <div class="col-4 h3 text-center">Abholungen per Telefon: {{ appointment_phone }}</div>
+    </div>
     <div class="row">
         <div class="col">
             <div id="timeslot_piechart" style="height: 400px;"></div>

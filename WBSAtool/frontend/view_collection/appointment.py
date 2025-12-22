@@ -59,3 +59,13 @@ class AppointmentMapView(LoginRequiredMixin, TemplateView):
 
 class AppointmentStatsView(LoginRequiredMixin, TemplateView):
     template_name = "appointment/stats.html"
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'appointment_total': Appointment.objects.count(),
+            'appointment_collected': Appointment.objects.filter(is_collected=True).count(),
+            'appointment_pending': Appointment.objects.filter(is_collected=False).count(),
+            'appointment_email': Appointment.objects.all().exclude(email="").count(),
+            'appointment_phone': Appointment.objects.filter(email="").exclude(phone="").count()
+        }
+        return context

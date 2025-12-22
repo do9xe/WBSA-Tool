@@ -90,16 +90,12 @@ class Appointment(models.Model):
                             blank=True,
                             default="")
     phone = models.CharField(max_length=200,
-                             null=True,
                              blank=True)
     email = models.CharField(max_length=200,
-                             null=True,
-                             blank=True)
+                             blank=True),
     lat = models.CharField(max_length=200,
-                             null=True,
                              blank=True)
     lon = models.CharField(max_length=200,
-                             null=True,
                              blank=True)
 
     def __str__(self):
