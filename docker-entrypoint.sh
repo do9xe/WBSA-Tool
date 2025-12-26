@@ -8,7 +8,7 @@ cd /code/WBSAtool
 python manage.py collectstatic --noinput
 
 # Run migrations
-RUN python manage.py migrate --noinput
+python manage.py migrate --noinput
 
 # Execute the CMD passed to the container
 exec "$@"
