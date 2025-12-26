@@ -63,6 +63,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
+          annotations: ${{ steps.meta.outputs.annotations }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
