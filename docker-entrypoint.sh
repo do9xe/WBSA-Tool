@@ -2,7 +2,7 @@
 set -e
 
 # Ensure we're in the app directory
-cd /code
+cd /code/WBSAtool
 
 # Collect static files at container startup (works with a mounted /static volume)
 python manage.py collectstatic --noinput
