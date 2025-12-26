@@ -10,7 +10,7 @@ authors = [
 ]
 # Runtime dependencies migrated from requirements.txt
 dependencies = [
-  "Django==4.2.27",
+  "Django==5.2.9",
   "djangorestframework>=3.16.1",
   "django-filter==25.2",
   "reportlab==4.4.7",
