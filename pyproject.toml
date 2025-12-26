@@ -1,0 +1,23 @@
+[project]
+name = "wbsa-tool"
+version = "0.1.0"
+description = "WBSA Tool – Django application"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "Proprietary" }
+authors = [
+  { name = "Hendrik Lüth" }
+]
+# Runtime dependencies migrated from requirements.txt
+dependencies = [
+  "Django==4.2.27",
+  "djangorestframework>=3.16.1",
+  "django-filter==25.2",
+  "reportlab==4.4.7",
+  "requests==2.32.5",
+  "gunicorn",
+  "psycopg2",
+]
+
+[project.urls]
+Homepage = "https://github.com/ff-durlach/WBSA-Tool"

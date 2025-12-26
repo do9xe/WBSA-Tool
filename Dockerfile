@@ -3,9 +3,15 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
-COPY WBSAtool /code/
+# Install dependencies via pyproject.toml
+COPY pyproject.toml /code/
+
+# Copy application code
+COPY WBSAtool /code/WBSAtool
+COPY WBSAtool/manage.py /code/manage.py
+
+# Install the project
+RUN pip install .
 
 # Static files volume
 RUN mkdir /static
