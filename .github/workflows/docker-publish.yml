@@ -62,6 +62,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           annotations: ${{ steps.meta.outputs.annotations }}
           cache-from: type=gha
