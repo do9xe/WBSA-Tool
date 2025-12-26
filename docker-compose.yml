@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  web:
+    image: ff-durlach/wbsa-tool:latest
+    restart: always
+    expose:
+      - 8000
+    environment:
+      - DEBUG=True
+      - HSTS_SECONDS=31536000
+      # public hostname
+      - ALLOWED_HOSTS=
+      - TRUSTED_ORIGINS=
+      - SECRET_KEY=SECRET
+      - DATABASE=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_PORT=5432
+      # link to publicly reachable nominatim instance
+      - NOMINATIM_URL=https://nominatim/search
+    volumes:
+      - "./data/static:/static"
+    depends_on:
+      - nominatim
+      - db
+    networks:
+      - default
+      - proxy
+
+  nominatim:
+    image: mediagis/nominatim:4.3
+    restart: unless-stopped
+    environment:
+      # see https://github.com/mediagis/nominatim-docker/tree/master/4.3#configuration for more options
+      PBF_URL: https://download.geofabrik.de/europe/germany/baden-wuerttemberg/karlsruhe-regbez-latest.osm.pbf
+      REPLICATION_URL: https://download.geofabrik.de/europe/germany/baden-wuerttemberg/karlsruhe-regbez-updates/
+      NOMINATIM_PASSWORD: very_secure_password
+    networks:
+      - proxy
+    volumes:
+      - ./data/nominatim:/var/lib/postgresql/14/main
+    shm_size: 1gb
+
+
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - "./data/static:/usr/share/nginx/html/static:ro"
+    networks:
+      - proxy
+    depends_on:
+      - web
+
+
+networks:
+  proxy:

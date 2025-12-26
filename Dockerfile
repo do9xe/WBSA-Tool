@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.13
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -7,10 +7,16 @@ COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 COPY WBSAtool /code/
 
+# Static files volume
 RUN mkdir /static
 VOLUME /static
-RUN python manage.py collectstatic --noinput
-RUN python manage.py migrate --noinput
+
+# Copy startup script that will run scripts
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8000
-CMD gunicorn WBSAtool.wsgi:application --bind 0.0.0.0:8000 --workers 2
+
+# Entrypoint runs scripts then executes the container CMD
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["gunicorn", "WBSAtool.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2"]
