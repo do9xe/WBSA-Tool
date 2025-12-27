@@ -10,9 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
+        migrations.AlterField(
             model_name='appointment',
             name='email',
+            field=models.CharField(blank=True, default='', max_length=200),
+            preserve_default=False,
         ),
         migrations.AlterField(
             model_name='appointment',

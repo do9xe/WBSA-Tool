@@ -92,7 +92,7 @@ class Appointment(models.Model):
     phone = models.CharField(max_length=200,
                              blank=True)
     email = models.CharField(max_length=200,
-                             blank=True),
+                             blank=True)
     lat = models.CharField(max_length=200,
                              blank=True)
     lon = models.CharField(max_length=200,
