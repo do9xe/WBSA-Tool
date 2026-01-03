@@ -37,6 +37,7 @@
     <a class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom">
         <span class="fs-5 fw-semibold">Zeitslots</span>
     </a>
+    <div class="overflow-auto ">
         {% for timeslot in timeslot_list %}
         <b>{{timeslot.date}}, {{timeslot.time_from|date:"H:i"}}-{{timeslot.time_to|date:"H:i"}}<br></b>
         {% with timeslot.get_all_percentage as p_list %}
@@ -52,7 +53,8 @@
         {% endwith %}
         <br>
         {% endfor %}
-    <a class="btn btn-primary my-5" onclick="submitOverwriteData()">Speichern</a>
+    </div>
+    <a class="btn btn-primary mt-3" onclick="submitOverwriteData()">Speichern</a>
     </div>
 </div>
 <script>
